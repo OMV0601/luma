@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { TACTICS } from "../../../shared/tactics";
 
 /**
@@ -13,15 +14,28 @@ export default function FlagPicker({
   onClose: () => void;
   already: string[];
 }) {
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Dialog a11y: focus the sheet on open, Escape closes.
+  useEffect(() => {
+    panelRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
   return (
     <div
       className="fixed inset-0 z-50 bg-ink/50 flex items-end sm:items-center sm:justify-center"
       onClick={onClose}
       role="dialog"
+      aria-modal="true"
       aria-label="Flag this message with a tactic"
     >
       <div
-        className="paper-card w-full sm:max-w-md max-h-[75dvh] overflow-y-auto rounded-b-none sm:rounded-md p-4"
+        ref={panelRef}
+        tabIndex={-1}
+        className="paper-card w-full sm:max-w-md max-h-[75dvh] overflow-y-auto rounded-b-none sm:rounded-md p-4 outline-none"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">

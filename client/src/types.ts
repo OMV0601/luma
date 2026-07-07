@@ -44,6 +44,8 @@ export interface ScenarioDocument {
   title: string;
   text: string;
   clauses: LeaseClause[];
+  /** plain-English one-liner per numbered clause ("1".."18") — the jargon translator */
+  translations?: Record<string, string>;
 }
 
 export interface RoundScenario {
@@ -98,6 +100,15 @@ export interface BreakdownRow {
   buried?: boolean;
 }
 
+export interface Verification {
+  engine: "wolframalpha";
+  query: string;
+  claim: string;
+  expected: number;
+  result: string;
+  verified: boolean;
+}
+
 export interface DebriefData {
   scenario: { slug: string; title: string; adversaryName: string; avatar: string };
   decision: string;
@@ -115,6 +126,8 @@ export interface DebriefData {
   };
   neutralizingQuestions: string[];
   document: ScenarioDocument | null;
+  /** independent Wolfram|Alpha cross-check of the key computation, if available */
+  verification: Verification | null;
 }
 
 export interface RadarEntry {

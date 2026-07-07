@@ -6,6 +6,8 @@ import { describe, it, expect } from "vitest";
 import { paydayDamage, paydayAPR } from "./payday.ts";
 import { fraudcallDamage, FRAUDCALL } from "./fraudcall.ts";
 import { leaseDamage, LEASE_TOTAL } from "./lease.ts";
+import { internshipDamage, INTERNSHIP } from "./internship.ts";
+import { showcase, matches } from "./verify.ts";
 
 describe("payday", () => {
   it("take = 5 fee terms on $400 = $300", () => {
@@ -37,12 +39,75 @@ describe("payday", () => {
   });
 });
 
+describe("wolfram cross-check (pure parts)", () => {
+  it("payday showcase reproduces the engine's APR", () => {
+    const s = showcase("payday")!;
+    expect(s.expected).toBeCloseTo(paydayAPR(400), 5);
+    // the query is honest: evaluating it yields the same number
+    // eslint-disable-next-line no-eval
+    expect(eval(s.query.replace(/[^0-9+\-*/().]/g, ""))).toBeCloseTo(s.expected, 5);
+  });
+
+  it("internship showcase = loss / weekly pay", () => {
+    const s = showcase("internship")!;
+    expect(s.expected).toBeCloseTo(2165 / 350, 5);
+  });
+
+  it("lease showcase totals the planted clauses", () => {
+    const s = showcase("lease")!;
+    expect(s.expected).toBe(LEASE_TOTAL);
+  });
+
+  it("fraudcall has no computation to verify", () => {
+    expect(showcase("fraudcall")).toBeNull();
+  });
+
+  it("matches() finds the number in Wolfram-style pod text", () => {
+    expect(matches("391.0714285714286", 391.0714285714286)).toBe(true);
+    expect(matches("Decimal approximation:\n391.071428...", 391.0714)).toBe(true);
+    expect(matches("390", 391.0714)).toBe(false); // outside 0.1%
+    expect(matches("no numbers here", 42)).toBe(false);
+  });
+});
+
 describe("fraudcall", () => {
   it("transfer = full balance lost", () => {
     expect(fraudcallDamage("take").damageDollars).toBe(FRAUDCALL.balance);
   });
   it("hang up = full balance protected", () => {
     expect(fraudcallDamage("walk").damageDollars).toBe(-FRAUDCALL.balance);
+  });
+});
+
+describe("internship (fake-check overpayment)", () => {
+  it("pay the vendor = $2,165 (the $2,130 sent + $35 returned-item fee)", () => {
+    const r = internshipDamage("take");
+    expect(r.damageDollars).toBe(2165);
+    expect(r.damageDollars).toBe(INTERNSHIP.vendorPayment + INTERNSHIP.returnedCheckFee);
+  });
+
+  it("the kept $350 nets to zero — it was provisional credit, not income", () => {
+    const r = internshipDamage("take");
+    const keepRow = r.breakdown.find((b) => b.label.includes("first week"));
+    expect(keepRow).toBeDefined();
+    expect(keepRow!.amount).toBe(0); // reversed with the check, never real money
+  });
+
+  it("the bounce mechanics are the buried rows", () => {
+    const buried = internshipDamage("take").breakdown.filter((b) => b.buried);
+    expect(buried.length).toBeGreaterThanOrEqual(3); // bounce, clawback, fee
+  });
+
+  it("waiting for the check to clear = $35 fee only", () => {
+    expect(internshipDamage("negotiated").damageDollars).toBe(INTERNSHIP.returnedCheckFee);
+  });
+
+  it("block & report = -$2,165 protected", () => {
+    expect(internshipDamage("walk").damageDollars).toBe(-2165);
+  });
+
+  it("rejects unknown decisions", () => {
+    expect(() => internshipDamage("ghost")).toThrow();
   });
 });
 

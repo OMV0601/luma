@@ -14,6 +14,16 @@
     outline: 2px solid #1c1917;
     outline-offset: 2px;
   }
+  /* Readable mode: Atkinson Hyperlegible (designed for low vision / dyslexia)
+     for running text, slightly relaxed tracking. Display + stamps keep the
+     case-file voice — labels are short and high-contrast already. */
+  html.readable body {
+    font-family: "Atkinson Hyperlegible", Inter, system-ui, sans-serif;
+    letter-spacing: 0.01em;
+  }
+  html.readable .font-body {
+    font-family: "Atkinson Hyperlegible", Inter, system-ui, sans-serif;
+  }
 }
 
 @layer components {

@@ -120,15 +120,15 @@ async function llmReferee(
 /** Keyword evidence that a user "verbally caught" a tactic. */
 const CATCH_PATTERNS: Record<string, RegExp> = {
   fee_burial: /\b(apr|annual|interest rate|percent|%|total.*(repay|pay ?back|owe)|every (fee|dollar|cost)|all (the )?fees|amenity)\b/i,
-  urgency: /\b(deadline|rush|pressur|today only|why (now|the hurry)|take my time|not deciding today|slow down)\b/i,
+  urgency: /\b(deadline|rush|pressur|today only|why (now|the hurry)|take my time|not deciding today|slow down|wait (for|until|till).{0,24}clear|(fully|actually) clears?|10 (business )?days)\b/i,
   scarcity: /\b(other applicants?|other applications?|prove|verify|who else|if it'?s gone)\b/i,
-  authority: /\b(call (the|my) bank|number on (my|the) card|verify you|badge|prove you|call back|not who you say)\b/i,
+  authority: /\b(call (the|my) bank|number on (my|the) card|verify you|badge|prove you|call back|not who you say|registered (business|address)|look (you|it|the company) up|main line|verify (the |this )?(company|job|role))\b/i,
   anchoring: /\b(don'?t need (six|the) hundred|just (the )?(four hundred|400)|no upsell|smaller amount|compare|credit union)\b/i,
-  isolation: /\b(hang(ing)? up|tell (my|someone)|talk to (my|someone)|why can'?t i call|don'?t tell anyone|branch)\b/i,
+  isolation: /\b(hang(ing)? up|tell (my|someone)|talk to (my|someone)|why can'?t i call|don'?t tell anyone|branch|teller|tell (the )?bank|mom|dad|parents?|counselor)\b/i,
   normalizing: /\b(standard (doesn'?t|isn'?t)|not normal|roll ?over.*(cost|trap|fee)|principal|still owe|clause 9|auto.?renew)\b/i,
   sunk_cost: /\b(sunk cost|doesn'?t matter (what|how much)|already (spent|invested).*(gone|irrelevant)|start over)\b/i,
-  reciprocity: /\b(waiv|favor|discount.*(bad deal|still)|didn'?t ask (you )?for|no such thing as free)\b/i,
-  flooding: /\b(one sentence|plain english|explain (that|this|it)|slow(er)?|too (much|many)|clause 17|repairs?|read (it|this|the lease))\b/i,
+  reciprocity: /\b(waiv|favor|discount.*(bad deal|still)|didn'?t ask (you )?for|no such thing as free|before i('ve)? (even )?(work|start)|pay me up ?front|why.{0,16}up ?front)\b/i,
+  flooding: /\b(one sentence|plain english|explain (that|this|it)|slow(er)?|too (much|many)|clause 17|repairs?|read (it|this|the lease)|(my|personal) (own )?(bank )?account|through me|buy it (yourself|directly)|company (buy|pay)s?)\b/i,
 };
 
 function offlineReferee(

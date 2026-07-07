@@ -41,16 +41,24 @@ function pickVoice(): SpeechSynthesisVoice | null {
 }
 
 export function speak(text: string, onEnd?: () => void): () => void {
-  const synth = window.speechSynthesis;
-  synth.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  const v = pickVoice();
-  if (v) utter.voice = v;
-  utter.rate = 1.05;
-  utter.pitch = 0.95;
-  if (onEnd) utter.onend = onEnd;
-  synth.speak(utter);
-  return () => synth.cancel();
+  // TTS backends vary wildly (missing voices, no audio device). Captions
+  // always render regardless, so a failed speak() must never take down the
+  // call screen.
+  try {
+    const synth = window.speechSynthesis;
+    synth.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    const v = pickVoice();
+    if (v) utter.voice = v;
+    utter.rate = 1.05;
+    utter.pitch = 0.95;
+    if (onEnd) utter.onend = onEnd;
+    synth.speak(utter);
+    return () => synth.cancel();
+  } catch {
+    onEnd?.();
+    return () => {};
+  }
 }
 
 type RecognitionCtor = new () => SR;

@@ -16,7 +16,9 @@ export default function Redaction({ children }: { children: React.ReactNode }) {
         className="absolute inset-0 bg-redact"
         initial={{ scaleX: 1 }}
         whileInView={{ scaleX: 0 }}
-        viewport={{ once: true, amount: 0.9 }}
+        // amount 0.9 left bars stuck on rows partially clipped at the
+        // viewport edge; half-visible is enough to earn the reveal.
+        viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.7, delay: 0.35, ease: [0.7, 0, 0.2, 1] }}
         style={{ transformOrigin: "right" }}
       />

@@ -3,10 +3,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { api } from "../api";
 
-const VALID = ["payday", "fraudcall", "lease"];
+const VALID = ["payday", "internship", "fraudcall", "lease"];
 
 /**
- * Judge Mode: /play?scenario=payday|fraudcall|lease
+ * Judge Mode: /play?scenario=payday|internship|fraudcall|lease
  * Instant guest session -> straight into a round. Built to be handed to a
  * judge during Q&A with zero setup.
  */

@@ -89,6 +89,14 @@ export function InCall({
   const canListen = recognitionSupported();
   const [typed, setTyped] = useState("");
 
+  // Live call timer — a frozen 00:00 reads as a bug on camera.
+  const [seconds, setSeconds] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setSeconds((s) => s + 1), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const clock = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+
   // Speak each new adversary line; captions always render for accessibility.
   useEffect(() => {
     if (!lastAdversaryLine) return;
@@ -115,12 +123,15 @@ export function InCall({
           ⚠ unverified caller
         </p>
         <h2 className="font-display text-xl mt-1">{callerName}</h2>
-        <p className="font-mono text-xs text-paper-bright/50 mt-1">00:00 · FIRST NATIONAL BANK</p>
+        <p className="font-mono text-xs text-paper-bright/50 mt-1">{clock} · FIRST NATIONAL BANK</p>
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center gap-6 min-h-0">
         <Waveform active={speaking && Boolean(lastAdversaryLine)} />
-        <p className="max-w-md text-center text-sm leading-relaxed text-paper-bright/90 overflow-y-auto max-h-48 px-2">
+        <p
+          aria-live="polite"
+          className="max-w-md text-center text-sm leading-relaxed text-paper-bright/90 overflow-y-auto max-h-48 px-2"
+        >
           “{caption || "…"}”
         </p>
       </div>

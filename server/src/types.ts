@@ -27,6 +27,8 @@ export interface ScenarioDocument {
   title: string;
   text: string;
   clauses: LeaseClause[];
+  /** plain-English one-liner per numbered clause ("1".."18") — the jargon translator */
+  translations?: Record<string, string>;
 }
 
 export interface DecisionOption {

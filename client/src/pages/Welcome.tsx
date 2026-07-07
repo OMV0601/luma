@@ -1,9 +1,46 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../api";
 import type { Me, ScenarioCard } from "../types";
+import Redaction from "../components/Redaction";
 import { SkeletonCard } from "../components/Skeleton";
+
+/** Decorative evidence stack for the hero — the product's own artifacts,
+ *  tilted like they were dropped on a desk. Pure markup, no images. */
+function EvidenceStack() {
+  return (
+    <div className="relative hidden md:block select-none" aria-hidden>
+      <div className="paper-card p-4 rotate-[-3deg] max-w-xs">
+        <p className="stamp-text text-[10px] font-bold text-ink/50">EXHIBIT A — THE PITCH</p>
+        <p className="font-mono text-sm mt-2 leading-snug">
+          “Fifteen bucks per hundred. Flat. Simplest math in the business.”
+        </p>
+        <p className="font-mono text-sm mt-2 font-semibold text-redink">
+          <Redaction>= 391.1% APR</Redaction>
+        </p>
+      </div>
+      <div className="paper-card p-4 rotate-[2.5deg] max-w-[15rem] ml-16 -mt-3">
+        <span className="stamp-text text-[10px] font-bold text-amber border-2 border-amber rounded-sm px-1.5 py-0.5">
+          ⚑ URGENCY PRESSURE
+        </span>
+        <p className="font-mono text-[11px] mt-2 text-ink/70">
+          flagged live, msg 3 —{" "}
+          <span className="text-verified font-bold">CAUGHT IN THE ACT</span>
+        </p>
+      </div>
+      <div className="paper-card p-4 rotate-[-1.5deg] max-w-[13rem] ml-6 -mt-2">
+        <p className="stamp-text text-[9px] font-semibold text-ink/50">
+          WHAT IT WOULD HAVE COST YOU
+        </p>
+        <p className="font-display text-3xl text-redink mt-1 tabular">-$2,165</p>
+        <span className="stamp-text inline-block mt-1 text-[10px] font-bold text-redink border-2 border-redink rounded-sm px-1.5 py-0.5 rotate-[-6deg]">
+          MARK
+        </span>
+      </div>
+    </div>
+  );
+}
 
 export default function Welcome() {
   const nav = useNavigate();
@@ -38,6 +75,7 @@ export default function Welcome() {
   return (
     <div className="mx-auto max-w-5xl w-full px-4 py-10 md:py-16">
       {/* Hero */}
+      <div className="md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] md:gap-10 md:items-center">
       <div className="max-w-2xl">
         <p className="stamp-text text-xs text-redink font-semibold">
           CONSUMER FRAUD TRAINING DIVISION
@@ -74,13 +112,15 @@ export default function Welcome() {
           {error && <span className="text-redink font-mono text-xs">{error}</span>}
         </form>
       </div>
+      <EvidenceStack />
+      </div>
 
       {/* Wanted posters */}
       <div className="mt-12">
         <h2 className="stamp-text text-sm font-semibold text-ink/60">ACTIVE SUBJECTS</h2>
-        <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-4 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {!data
-            ? [1, 2, 3].map((i) => <SkeletonCard key={i} />)
+            ? [1, 2, 3, 4].map((i) => <SkeletonCard key={i} />)
             : data.scenarios.map((s) => (
                 <article key={s.slug} className="paper-card p-5 relative overflow-hidden">
                   <p className="stamp-text text-[10px] text-redink font-semibold">WANTED</p>
@@ -96,6 +136,13 @@ export default function Welcome() {
               ))}
         </div>
       </div>
+
+      <p className="mt-10 font-mono text-xs text-ink/50">
+        Running a credit union, bank, or classroom?{" "}
+        <Link to="/for-institutions" className="underline underline-offset-4 hover:text-ink">
+          FoolProof for institutions →
+        </Link>
+      </p>
     </div>
   );
 }

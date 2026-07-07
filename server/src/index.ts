@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url";
 import { seed } from "./seed.ts";
 import { api } from "./routes.ts";
 import { hasApiKey } from "./adversary/llm.ts";
+import { SqliteSessionStore } from "./sessionStore.ts";
 
 seed();
 
@@ -18,6 +19,7 @@ const app = express();
 app.use(express.json());
 app.use(
   session({
+    store: new SqliteSessionStore(), // survives server restarts
     secret: process.env.SESSION_SECRET || "foolproof-dev-secret",
     resave: false,
     saveUninitialized: false,

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "foolproof",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "-w", "client", "--", "--port", "5180"],
+      "port": 5180
+    }
+  ]
+}

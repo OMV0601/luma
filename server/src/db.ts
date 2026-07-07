@@ -92,7 +92,12 @@ CREATE TABLE IF NOT EXISTS codex_unlocks (
   tactic_id TEXT NOT NULL,
   unlocked_at INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS web_sessions (
+  sid TEXT PRIMARY KEY,
+  sess TEXT NOT NULL,
+  expires_at INTEGER NOT NULL
+);
 `);
 
 export const db = drizzle(sqlite, { schema });
-export { schema };
+export { schema, sqlite };

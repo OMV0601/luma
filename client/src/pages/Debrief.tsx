@@ -6,6 +6,7 @@ import { tacticName } from "../../../shared/tactics";
 import Stamp from "../components/Stamp";
 import CountUp from "../components/CountUp";
 import Redaction from "../components/Redaction";
+import SealedFile from "../components/SealedFile";
 import { SkeletonBlock } from "../components/Skeleton";
 
 const OUTCOME_META = {
@@ -30,19 +31,12 @@ export default function Debrief() {
     queryFn: () => api.debrief<DebriefData>(sessionId!),
   });
 
+  if (error) return <SealedFile message={(error as Error).message} />;
   if (isLoading || !data) {
     return (
       <div className="mx-auto max-w-3xl w-full px-4 py-10 space-y-4">
-        {error ? (
-          <div className="paper-card p-5 text-redink font-mono text-sm">
-            {(error as Error).message}
-          </div>
-        ) : (
-          <>
-            <SkeletonBlock className="h-28 w-full" />
-            <SkeletonBlock className="h-64 w-full" />
-          </>
-        )}
+        <SkeletonBlock className="h-28 w-full" />
+        <SkeletonBlock className="h-64 w-full" />
       </div>
     );
   }
@@ -130,6 +124,22 @@ export default function Debrief() {
         <p className="font-mono text-[10px] uppercase tracking-wider text-ink/40 mt-2">
           Figures computed by the deterministic damage engine — not by the AI.
         </p>
+        {data.verification?.verified && (
+          <div className="mt-2 border-2 border-verified rounded-md px-3 py-2 bg-paper-bright flex items-start gap-2">
+            <span className="text-verified font-bold" aria-hidden>
+              ✓
+            </span>
+            <div className="min-w-0">
+              <p className="stamp-text text-[10px] font-bold text-verified">
+                INDEPENDENTLY CROSS-CHECKED — WOLFRAM|ALPHA
+              </p>
+              <p className="font-mono text-[11px] text-ink/70 mt-0.5 break-words">
+                {data.verification.query} ={" "}
+                {Math.round(data.verification.expected * 100) / 100} — {data.verification.claim}
+              </p>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ---- Annotated transcript ---- */}

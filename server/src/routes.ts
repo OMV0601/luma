@@ -20,6 +20,7 @@ import {
 } from "./adversary/scripted.ts";
 import { refereeRound, type TranscriptEntry } from "./referee.ts";
 import { runDamage, type DamageContext } from "./damage/index.ts";
+import { verifyDamage } from "./damage/verify.ts";
 
 export const api = Router();
 
@@ -482,7 +483,7 @@ api.post("/round/:id/decide", async (req, res) => {
 /* Debrief (Evidence File payload)                                     */
 /* ------------------------------------------------------------------ */
 
-api.get("/debrief/:sessionId", (req, res) => {
+api.get("/debrief/:sessionId", async (req, res) => {
   const userId = requireUser(req, res);
   if (!userId) return;
   const id = Number(req.params.sessionId);
@@ -508,6 +509,9 @@ api.get("/debrief/:sessionId", (req, res) => {
 
   const decisionLabel =
     playbook.decisions.find((d) => d.id === session.decision)?.label ?? session.decision;
+
+  // Independent cross-check of the damage math (cached; null without a key).
+  const verification = await verifyDamage(scenario.damageModel);
 
   res.json({
     scenario: {
@@ -536,6 +540,7 @@ api.get("/debrief/:sessionId", (req, res) => {
     },
     neutralizingQuestions: playbook.neutralizingQuestions,
     document: playbook.document ?? null,
+    verification,
   });
 });
 

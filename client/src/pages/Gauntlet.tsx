@@ -40,9 +40,9 @@ export default function Gauntlet() {
         )}
       </div>
 
-      <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid gap-5 sm:grid-cols-2">
         {!data
-          ? [1, 2, 3].map((i) => <SkeletonCard key={i} />)
+          ? [1, 2, 3, 4].map((i) => <SkeletonCard key={i} />)
           : data.scenarios.map((s) => (
               <article key={s.slug} className="paper-card p-5 flex flex-col relative">
                 <div className="absolute top-3 right-3">

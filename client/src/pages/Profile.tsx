@@ -11,14 +11,17 @@ import {
 import { api, usd } from "../api";
 import type { ProfileData } from "../types";
 import Stamp from "../components/Stamp";
+import SealedFile from "../components/SealedFile";
 import { SkeletonBlock } from "../components/Skeleton";
 
 export default function Profile() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["profile"],
     queryFn: () => api.profile<ProfileData>(),
   });
 
+  // Without this, an expired session leaves the skeleton up forever.
+  if (error) return <SealedFile message={(error as Error).message} />;
   if (isLoading || !data) {
     return (
       <div className="mx-auto max-w-4xl w-full px-4 py-8 space-y-4">
