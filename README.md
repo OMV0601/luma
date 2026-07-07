@@ -1,129 +1,106 @@
-# 🛡 FoolProof
+# 🗂️ FoolProof
 
-**Train your financial defenses by negotiating against AI scammers — lose fake money, not real money.**
+**Get scammed here, so it never happens out there.**
 
-Americans lost **$15.9 billion** to fraud last year, and financial literacy taught through passive lessons doesn't stick. FoolProof teaches through adversarial experience: you negotiate against AI-powered adversaries — a payday lender, a fake bank fraud-alert caller, a predatory landlord — each armed with real, documented manipulation tactics. After every round, you see exactly which traps you caught, which ones got you, and what your mistakes would have cost **in real dollars**, computed with real financial math.
+Financial literacy is taught passively — articles, videos, quizzes — but money is lost *actively*: a convincing person, in the moment, talks you into a bad decision. Americans reported **$15.9B in fraud losses in 2025** (FTC), and that excludes the perfectly legal traps: payday rollovers, buried lease clauses, F&I upsells. FoolProof is an **adversarial training simulator**: AI characters actively try to exploit you in realistic scenarios, and after every round an independent referee produces an annotated **Evidence File** of the conversation — every manipulation attempt highlighted, labeled, and priced in real dollars by deterministic financial math.
 
-## How it works — the dual-agent architecture
+## The Gauntlet (three playable adversaries)
 
-```
-                       ┌──────────────────────────┐
-  user message ──────► │  ADVERSARY agent          │  plays the scammer.
-                       │  (Claude Opus 4.8)        │  persona + hidden tactic
-                       │                           │  playbook (data, not code)
-                       └────────────┬─────────────┘
-                                    │ reply
-                                    ▼
-                       ┌──────────────────────────┐
-                       │  REFEREE agent            │  independent classifier.
-                       │  (Claude Opus 4.8,        │  tags every manipulation
-                       │   structured outputs —    │  attempt against a 10-tactic
-                       │   schema-guaranteed JSON) │  taxonomy, with exact quotes
-                       └────────────┬─────────────┘
-                                    │ annotations
-                                    ▼
-   round end ────────► ┌──────────────────────────┐
-   (accept /           │  SCORING ENGINE           │  deterministic. no AI.
-    walk away)         │  (plain JavaScript)       │  real APR & amortization math
-                       │                           │  → dollars lost, grade, debrief
-                       └──────────────────────────┘
-```
-
-Three properties matter:
-
-1. **The referee is independent of the adversary** — the scammer never grades its own exam. It uses structured outputs (`output_config.format` with a JSON schema), so its verdicts are guaranteed parseable, never prompt-and-pray.
-2. **Every dollar figure is deterministic.** The 391% payday APR, the rollover-cycle fees, the amortized fair-loan comparison, the lease clause totals — all computed in [`server/src/scoring/finance.js`](server/src/scoring/finance.js) with standard formulas (CFPB payday APR formula, standard amortization). The AI never invents a number.
-3. **Scenarios are data, not code.** A scenario file defines a persona, a tactic playbook, concession rules, and traps with cost formulas ([`server/src/scenarios/`](server/src/scenarios/)). Adding a fourth adversary requires zero engine changes — that's the scalability story.
-
-## The tactic taxonomy
-
-Ten documented manipulation patterns, sourced from FTC fraud reports, CFPB payday-lending studies, and tenant-rights literature: urgency pressure, authority impersonation, fee burial, rate anchoring, false scarcity, isolation, sunk-cost pressure, reciprocity baiting, complexity flooding, reassurance framing. Defined once in [`server/src/taxonomy.js`](server/src/taxonomy.js) and shared by the adversary's playbook, the referee's classifier, and the debrief UI.
-
-## The three MVP scenarios
-
-| Scenario | Adversary | The traps | Exposure |
+| Case | Adversary | The con | Exposure |
 |---|---|---|---|
-| **The Payday Loan Office** | Rick, QuickCash Plus | "$15 per $100" hiding 391% APR, the rollover cycle, auto-debit NSF fees, overdraft anchoring | ~$370 |
-| **The Fraud Alert Call** | "Marcus," fake bank security | the "secure account" transfer, the verification-code handover, secrecy demands, a fictional deadline | $7,050 |
-| **The First Apartment** | Diane, landlord | a real lease document with 3 buried clauses: $150/mo "amenity fee," +8% auto-renewal, $500 non-refundable "restoration fee" | ~$5,444 |
+| 🤝 **Quick Cash Danny** | payday lender | "$15 per $100" hiding 391% APR + the rollover cycle + the $600 upsell | $300–450 |
+| 📞 **The Fraud Alert** | fake bank security caller (**voice mode**) | the "secure account" transfer, badge numbers, don't-hang-up isolation | $4,800 |
+| 🏠 **The Lease Signing** | landlord with a poisoned lease | a real 18-clause document with 3 planted clauses you must find | $2,850 |
+
+## Architecture — why this isn't a wrapper
+
+```
+                       ┌─────────────────────────────┐
+   user message ─────► │ ADVERSARY ENGINE            │ persona + JSON playbook
+                       │ Claude (SSE streaming)      │ (beats, concessions,
+                       │ or scripted state machine   │  guardrails — DATA, not code)
+                       └────────────┬────────────────┘
+                                    │ hidden [[beat:bN]] marker → beat tracking
+   decision ─────────► ┌─────────────────────────────┐
+   (+ user's flags)    │ AI REFEREE (independent)    │ strict-JSON findings:
+                       │ second model call, or       │ caught / resisted / fell_for
+                       │ deterministic offline grader│ per playbook beat
+                       └────────────┬────────────────┘
+                                    ▼
+                       ┌─────────────────────────────┐
+                       │ DAMAGE ENGINE — no AI       │ unit-tested TypeScript:
+                       │ server/src/damage/*.ts      │ APR, rollovers, clause costs,
+                       │ 13 vitest tests             │ unrecoverable transfers
+                       └─────────────────────────────┘
+```
+
+1. **The scammer never grades its own exam.** The referee is a separate model call that receives the transcript, the 10-tactic taxonomy, the playbook's ground-truth beats, and the user's live flags — and returns strict JSON.
+2. **The money math is engineered, not generated.** Every dollar in a debrief comes from pure functions in [`server/src/damage/`](server/src/damage/), locked by unit tests (`npm test`). The CFPB payday formula, lease clause totals, amortized comparisons — the AI never invents a number.
+3. **Playbooks are JSON, not code.** A new scam that hits the news becomes a new scenario in a day — content ops, not engineering ([`server/src/seed.ts`](server/src/seed.ts)).
+4. **The full loop works offline.** No API key? Each adversary runs as a scripted state machine (20+ lines, keyword-triggered branches for APR questions, pushback, leaving) and a deterministic grader scores the round. The demo cannot break.
+
+### The Call It Out mechanic
+
+During a round, flag any adversary message and name the tactic (10-tactic taxonomy in [`shared/tactics.ts`](shared/tactics.ts)). Correct flags = **caught in the act**; wrong flags stamp **UNFOUNDED**. In the lease case, tapping a clause in the embedded document challenges it on the record — challenged clauses drop out of the damage math.
 
 ## Run it
 
 ```bash
-# 1. install everything (npm workspaces)
 npm install
-
-# 2. add your Anthropic API key
-cp server/.env.example server/.env      # then edit server/.env
-
-# 3. run server (:3001) + client (:5173) together
-npm run dev
+copy server\.env.example server\.env    # add ANTHROPIC_API_KEY (optional — see below)
+npm run dev                             # server :3001 + client :5173
 ```
 
-Open **http://localhost:5173**, pick an adversary, and try not to get fooled.
+Open **http://localhost:5173**. Judge Mode: **http://localhost:5173/play?scenario=payday|fraudcall|lease** — instant guest session, zero setup.
 
-> Windows note: `cp` → `copy server\.env.example server\.env`.
+- **With `ANTHROPIC_API_KEY`**: adversaries are live Claude characters (streamed, beat-tracked).
+- **Without**: scripted adversaries run the same playbooks — full loop, fully offline.
+
+```bash
+npm test          # 13 damage-engine unit tests
+npm run build     # production build (Express serves client/dist on :3001)
+```
+
+## Stack
+
+React 18 + TypeScript + Vite · Tailwind (case-file design tokens) · Framer Motion (redaction reveals, stamp spring-ins, damage count-up) · Recharts (Street Smarts radar) · TanStack Query · Express + tsx · SQLite via better-sqlite3 + Drizzle · Anthropic Messages API with SSE streaming · browser SpeechSynthesis/SpeechRecognition for voice mode.
+
+## Business model
+
+**The wedge stat:** FTC-reported fraud hit a record **$15.9B in 2025** (+27% YoY); imposter scams alone were $3.5B — and the costliest ones start exactly like our Fraud Alert scenario. Including underreporting, FTC's own estimate of true consumer cost approaches **$200B/yr**.
+
+1. **Credit unions & banks (B2B, primary).** Banks increasingly reimburse scammed customers — scam losses are a P&L line now, not a PR problem. FoolProof licensed as a member benefit is measurable loss-prevention: train members on the exact imposter-call pattern driving reimbursements. **Comp: KnowBe4** built a multi-billion-dollar business on simulated phishing for employees; we are simulated fraud for customers. Per-member-per-year licensing + white-label scenario packs (the FI's own brand as the impersonated entity — that's who scammers actually impersonate).
+2. **Schools (B2B, secondary).** A growing majority of U.S. states mandate a personal-finance course for graduation — a budgeted, mandated buyer. Per-seat district licensing; the Evidence File doubles as gradeable coursework.
+3. **Consumers (freemium, top of funnel).** Free: the core Gauntlet. Paid ($4/mo): a new adversary drop monthly (our content pipeline mirrors FTC alerts), difficulty tiers, family accounts — train your parents: adults 50+ reported $4.3B in losses, the single most exposed group.
+
+**Moat / scalability:** playbooks are JSON; referee + damage engines are shared infrastructure across all scenarios; SQLite→Postgres is a Drizzle dialect swap; the API is stateless HTTP and scales horizontally.
 
 ## Repo tour
 
 ```
-server/
-  src/
-    index.js            Express API (sessions, messages, decision)
-    config.js           Anthropic client + model selection
-    taxonomy.js         the 10-tactic manipulation taxonomy
-    agents/
-      adversary.js      scammer roleplay agent (persona + playbook prompt)
-      referee.js        classifier + end-of-round judge (structured outputs)
-    scoring/
-      finance.js        APR / amortization / fee math — deterministic
-      score.js          verdicts + decision → dollars, awareness, grade
-    scenarios/          one file per adversary: persona, playbook, traps, costs
-    store.js            in-memory sessions (swap point for Postgres/Supabase)
-client/
-  src/
-    App.jsx             home → chat → debrief state machine
-    components/
-      Home.jsx          scenario picker + lifetime protected/lost tally
-      Chat.jsx          negotiation UI, Coach Mode toggle, lease document modal
-      Debrief.jsx       trap verdicts, dollar costs, fair alternative, replay
+shared/tactics.ts             the 10-tactic taxonomy (one source of truth)
+server/src/
+  seed.ts                     3 scenarios: personas, playbooks, lease doc, fallback trees
+  adversary/prompt.ts         playbook -> system prompt scaffold
+  adversary/llm.ts            Claude streaming + hidden beat-marker parsing
+  adversary/scripted.ts       offline state machine (same interface)
+  referee.ts                  independent grader (LLM strict-JSON + offline fallback)
+  damage/{payday,fraudcall,lease}.ts   deterministic engines + damage.test.ts
+  routes.ts                   auth, rounds, SSE messages, flags, decide, debrief, profile
+client/src/
+  pages/Round.tsx             chat, flag mechanic, decisions, voice phases
+  pages/Debrief.tsx           the Evidence File: margin stamps, redaction reveals, count-up
+  components/CallScreen.tsx   incoming-call UI, waveform, tap-to-talk
+  components/LeaseDoc.tsx     embedded lease, tap-to-challenge clauses
+  pages/Profile.tsx           Street Smarts radar + Money Protected/Lost
 ```
 
-## API
+## Five-minute video map (rubric order)
 
-| Endpoint | Purpose |
-|---|---|
-| `GET /api/scenarios` | scenario picker metadata |
-| `GET /api/scenarios/:id/document` | the lease document |
-| `POST /api/sessions` | start a round (returns scripted opening) |
-| `POST /api/sessions/:id/messages` | user turn → adversary reply + referee annotations |
-| `POST /api/sessions/:id/decision` | `accept` / `walk_away` → judged, scored debrief |
+1. **Problem (0:00–0:45):** the $15.9B stat; "every other tool is an AI that helps you — ours try to rob you."
+2. **Build (0:45–2:00):** the architecture diagram above; show `damage.test.ts` passing for two seconds; SSE streaming; offline fallback.
+3. **Demo (2:00–4:00):** Danny hustle → flag one tactic live → take the loan → Evidence File un-redacts the rollover fees → Fraud Alert in voice mode, hang up correctly, "$4,800 PROTECTED".
+4. **Scalability (4:00–4:30):** new scams = new JSON playbooks; Drizzle → Postgres; stateless API.
+5. **Business (4:30–5:00):** the three streams, led by the KnowBe4 comp.
 
-## Scoring rules (deterministic)
-
-- Each trap has a dollar cost from the finance engine ($0 for framing traps).
-- The referee grades each trap: **missed** (0 pts) / **spotted** (0.6) / **neutralized** (1.0) → awareness 0–100.
-- **Accept** a predatory deal → you eat every non-neutralized trap's cost; score caps at 55.
-- **Walk away** → nothing lost, everything protected; score = 40 + awareness × 0.6 (instinct counts, understanding counts more).
-- Grades: A ≥ 90, B ≥ 80, C ≥ 68, D ≥ 55, else F.
-
-## Business model (the 25% everyone forgets)
-
-FoolProof is the **KnowBe4 of consumer finance** — phishing-simulation training is already a billion-dollar category for corporate email; we apply the same "train by attack" model to the $15.9B consumer-fraud problem.
-
-- **B2B2C — banks & credit unions** license FoolProof as a member benefit. Scam losses cost institutions directly (reimbursements, support load, churn after a fraud event); a measurably scam-proofed member base is a hard-dollar ROI story. Per-member-per-month pricing.
-- **B2B — school districts & universities**: 25+ US states now mandate personal-finance coursework; FoolProof is a turnkey, measurable module (the awareness score is the assessment).
-- **B2C freemium**: 3 scenarios free, subscription for the full library + voice mode.
-
-## Roadmap
-
-- **Voice mode** for the fraud call (Deepgram + Twilio) — the scenario is already written for it.
-- **Institution dashboard**: cohort awareness scores, most-missed tactics.
-- **Multilingual adversaries** — scam scripts localize; so do ours.
-- **Scenario marketplace**: consumer-protection orgs author scenarios in our data format.
-- **Persistence**: swap `store.js` for Postgres; sessions are already stateless HTTP.
-
-## Team notes for the demo video
-
-- Rubric mapping: architecture & code walkthrough (Technical, 25%) → this README + `agents/`; adversarial-training concept + Coach Mode (Innovation/UX, 25%); business model above (Business, 25%); live demo — let a judge play the fraud call (Communication, 25%).
-- The referee's annotations are hidden during play by default (training wheels off) — flip **Coach Mode** on camera to show real-time tactic detection.
+**Q&A weapon:** hand the judges `/play?scenario=payday` and offer them the chair.

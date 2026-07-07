@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background: #f1ead8;
+  }
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+  }
+  /* Visible keyboard focus everywhere — case-file crisp, not browser-default */
+  :focus-visible {
+    outline: 2px solid #1c1917;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Printed-document surface: 2px ink border, hard shadow, small radius */
+  .paper-card {
+    @apply bg-paper-bright border-2 border-ink rounded-md shadow-card;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-ink rounded-md px-4 py-2
+      font-mono text-sm uppercase tracking-wider font-semibold bg-paper-bright
+      transition-transform active:translate-y-px disabled:opacity-40 disabled:pointer-events-none;
+  }
+  .btn-ink {
+    @apply btn bg-ink text-paper-bright;
+  }
+  .btn-red {
+    @apply btn border-redink text-redink;
+  }
+  .btn-green {
+    @apply btn border-verified text-verified;
+  }
+  .stamp-text {
+    @apply font-mono uppercase tracking-widest;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Waveform bars for the call screen */
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.25); }
+  50% { transform: scaleY(1); }
+}
+.wave-bar {
+  animation: wave 0.9s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* UNFOUNDED shake for wrong-flag feedback */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.shake {
+  animation: shake 0.28s ease-in-out 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-bar, .shake { animation: none; }
+  * { scroll-behavior: auto !important; }
+}

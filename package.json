@@ -1,15 +1,17 @@
 {
   "name": "foolproof",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
-  "description": "FoolProof — train your financial defenses by negotiating against AI scammers.",
+  "description": "FoolProof — get scammed here, so it never happens out there.",
   "workspaces": [
     "server",
     "client"
   ],
   "scripts": {
     "dev": "concurrently -n server,client -c blue,magenta \"npm run dev -w server\" \"npm run dev -w client\"",
-    "start": "npm run dev"
+    "test": "npm run test -w server",
+    "build": "npm run build -w client && npm run typecheck -w server",
+    "start": "npm run start -w server"
   },
   "devDependencies": {
     "concurrently": "^9.0.0"
