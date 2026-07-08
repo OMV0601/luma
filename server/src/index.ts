@@ -46,11 +46,30 @@ app.use(
 );
 
 const PORT = Number(process.env.PORT) || 3001;
-app.listen(PORT, () => {
-  console.log(`FoolProof API on http://localhost:${PORT}`);
-  console.log(
-    hasApiKey()
-      ? "[adversary] live — Anthropic API key found"
-      : "[adversary] scripted fallback — no ANTHROPIC_API_KEY (full loop still works)"
-  );
-});
+
+/**
+ * Listen with retry. Under `tsx watch`, a restart can race the old process
+ * for the port (EADDRINUSE) — especially with OneDrive touching files and
+ * triggering extra restarts. Instead of dying silently in one terminal pane,
+ * wait and retry so the dev server heals itself.
+ */
+function listen(attempt = 1) {
+  const server = app.listen(PORT, () => {
+    console.log(`FoolProof API on http://localhost:${PORT}`);
+    console.log(
+      hasApiKey()
+        ? "[adversary] live — Anthropic API key found"
+        : "[adversary] scripted fallback — no ANTHROPIC_API_KEY (full loop still works)"
+    );
+  });
+  server.on("error", (err: NodeJS.ErrnoException) => {
+    if (err.code === "EADDRINUSE" && attempt <= 10) {
+      console.warn(`[server] port ${PORT} busy — retrying (${attempt}/10)…`);
+      setTimeout(() => listen(attempt + 1), 1000);
+    } else {
+      console.error("[server] failed to start:", err);
+      process.exit(1);
+    }
+  });
+}
+listen();
