@@ -1,14 +1,18 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Phone } from "lucide-react";
+import { Phone, HelpCircle } from "lucide-react";
 import { api, usd } from "../api";
 import type { Me, ScenarioCard } from "../types";
 import Stamp from "../components/Stamp";
 import { SkeletonCard } from "../components/Skeleton";
-import { useEffect } from "react";
+import Tutorial from "../components/Tutorial";
+import { useEffect, useState } from "react";
+
+const TUTORIAL_KEY = "fp-tutorial-seen";
 
 export default function Gauntlet() {
   const nav = useNavigate();
+  const [params, setParams] = useSearchParams();
   const { data: me, isLoading: meLoading } = useQuery({
     queryKey: ["me"],
     queryFn: () => api.me<Me>(),
@@ -17,6 +21,19 @@ export default function Gauntlet() {
     queryKey: ["scenarios"],
     queryFn: () => api.scenarios<{ scenarios: ScenarioCard[] }>(),
   });
+
+  // Show the walkthrough on a fresh signup (?tour=1) or if never seen before.
+  const [showTour, setShowTour] = useState(
+    () => params.get("tour") === "1" || localStorage.getItem(TUTORIAL_KEY) !== "1"
+  );
+  function closeTour() {
+    localStorage.setItem(TUTORIAL_KEY, "1");
+    setShowTour(false);
+    if (params.get("tour")) {
+      params.delete("tour");
+      setParams(params, { replace: true });
+    }
+  }
 
   // Not logged in -> back to the front door.
   useEffect(() => {
@@ -32,12 +49,21 @@ export default function Gauntlet() {
             Pick a subject. Survive the pitch. Open the evidence file.
           </p>
         </div>
-        {me?.user && (me.roundsPlayed ?? 0) > 0 && (
-          <div className="font-mono text-xs text-right">
-            <div className="text-verified">PROTECTED: {usd(me.moneyProtected ?? 0)}</div>
-            <div className="text-redink">LOST: {usd(me.moneyLost ?? 0)}</div>
-          </div>
-        )}
+        <div className="flex items-center gap-3">
+          {me?.user && (me.roundsPlayed ?? 0) > 0 && (
+            <div className="font-mono text-xs text-right">
+              <div className="text-verified">PROTECTED: {usd(me.moneyProtected ?? 0)}</div>
+              <div className="text-redink">LOST: {usd(me.moneyLost ?? 0)}</div>
+            </div>
+          )}
+          <button
+            onClick={() => setShowTour(true)}
+            className="btn px-2.5 py-1.5 text-xs"
+            aria-label="How to play"
+          >
+            <HelpCircle className="h-3.5 w-3.5" /> How to play
+          </button>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
@@ -73,6 +99,8 @@ export default function Gauntlet() {
               </article>
             ))}
       </div>
+
+      {showTour && <Tutorial onDone={closeTour} />}
     </div>
   );
 }

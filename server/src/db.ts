@@ -21,6 +21,7 @@ sqlite.exec(`
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT NOT NULL UNIQUE,
+  password_hash TEXT,
   is_guest INTEGER NOT NULL DEFAULT 0,
   created_at INTEGER NOT NULL
 );
@@ -98,6 +99,13 @@ CREATE TABLE IF NOT EXISTS web_sessions (
   expires_at INTEGER NOT NULL
 );
 `);
+
+// Additive migration for DBs created before password auth: add the column
+// if an older users table is missing it. (CREATE TABLE IF NOT EXISTS won't.)
+const userCols = sqlite.prepare("PRAGMA table_info(users)").all() as { name: string }[];
+if (!userCols.some((c) => c.name === "password_hash")) {
+  sqlite.exec("ALTER TABLE users ADD COLUMN password_hash TEXT");
+}
 
 export const db = drizzle(sqlite, { schema });
 export { schema, sqlite };

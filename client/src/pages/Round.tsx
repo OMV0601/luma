@@ -245,12 +245,12 @@ export default function Round() {
                 <p className="text-sm mt-1 whitespace-pre-wrap leading-snug">{m.content}</p>
                 <button
                   onClick={() => setPicker(m.id)}
-                  className="absolute -right-2.5 -top-2.5 h-7 w-7 rounded-full border-2 border-ink bg-paper-bright
-                    flex items-center justify-center hover:bg-amber/20 focus-visible:outline focus-visible:outline-2"
+                  className="absolute -right-2.5 -top-2.5 h-9 w-9 rounded-full border-2 border-ink bg-paper-bright
+                    flex items-center justify-center hover:bg-amber/20 active:bg-amber/30 focus-visible:outline focus-visible:outline-2"
                   aria-label="Flag this message with a tactic"
                   title="Call it out"
                 >
-                  <Flag className="h-3.5 w-3.5" />
+                  <Flag className="h-4 w-4" />
                 </button>
               </div>
               {(m.flagged ?? []).length > 0 && (
@@ -302,7 +302,7 @@ export default function Round() {
       )}
 
       {/* composer + decisions */}
-      <div className="border-t-2 border-ink py-3 space-y-2.5">
+      <div className="border-t-2 border-ink py-3 space-y-2.5 safe-b">
         <form
           onSubmit={(e) => {
             e.preventDefault();

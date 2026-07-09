@@ -8,6 +8,8 @@ import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 export const users = sqliteTable("users", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   username: text("username").notNull().unique(),
+  /** scrypt "salt:hash"; null for guest accounts */
+  passwordHash: text("password_hash"),
   isGuest: integer("is_guest", { mode: "boolean" }).notNull().default(false),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
 });

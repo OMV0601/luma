@@ -13,9 +13,18 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 }
 
 export const api = {
-  login: (username: string) =>
-    request<{ user: unknown }>("/api/login", { method: "POST", body: JSON.stringify({ username }) }),
+  signup: (username: string, password: string) =>
+    request<{ user: unknown; isNew: boolean }>("/api/signup", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+    }),
+  login: (username: string, password: string) =>
+    request<{ user: unknown; isNew: boolean }>("/api/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+    }),
   guest: () => request<{ user: unknown }>("/api/guest", { method: "POST" }),
+  logout: () => request<{ ok: boolean }>("/api/logout", { method: "POST" }),
   me: <T>() => request<T>("/api/me"),
   scenarios: <T>() => request<T>("/api/scenarios"),
   startRound: (scenarioId: string, voiceMode = false) =>

@@ -14,6 +14,13 @@
     outline: 2px solid #1c1917;
     outline-offset: 2px;
   }
+  /* iOS zooms the page when a focused input's font is under 16px. Force 16px
+     on form controls so tapping the chat box never yanks the layout around. */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
   /* Readable mode: Atkinson Hyperlegible (designed for low vision / dyslexia)
      for running text, slightly relaxed tracking. Display + stamps keep the
      case-file voice — labels are short and high-contrast already. */
@@ -50,6 +57,13 @@
   }
   .tabular {
     font-variant-numeric: tabular-nums;
+  }
+  /* Respect the notch / home indicator on phones (viewport-fit=cover). */
+  .safe-b {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+  .safe-t {
+    padding-top: max(0.5rem, env(safe-area-inset-top));
   }
 }
 

@@ -77,7 +77,7 @@ export function IncomingCall({
   const id = caller ?? FALLBACK_CALLER;
   useRingTone(true);
   return (
-    <div className="fixed inset-0 z-40 bg-ink text-paper-bright flex flex-col items-center justify-between py-16 px-6">
+    <div className="fixed inset-0 z-40 bg-ink text-paper-bright flex flex-col items-center justify-between py-16 px-6 safe-t safe-b">
       <div className="text-center">
         <p className="font-mono text-xs uppercase tracking-widest text-paper-bright/60">
           incoming call
@@ -184,7 +184,7 @@ export function InCall({
   }
 
   return (
-    <div className="fixed inset-0 z-40 bg-ink text-paper-bright flex flex-col py-8 px-5">
+    <div className="fixed inset-0 z-40 bg-ink text-paper-bright flex flex-col py-8 px-5 safe-t safe-b">
       <div className="text-center">
         <p className="font-mono text-[10px] uppercase tracking-widest text-redink">
           ⚠ unverified caller

@@ -21,6 +21,7 @@ import {
 import { refereeRound, type TranscriptEntry } from "./referee.ts";
 import { runDamage, type DamageContext } from "./damage/index.ts";
 import { verifyDamage } from "./damage/verify.ts";
+import { hashPassword, verifyPassword, validateCredentials } from "./auth.ts";
 
 export const api = Router();
 
@@ -43,20 +44,41 @@ function requireUser(req: Request, res: Response): number | null {
   return id;
 }
 
-api.post("/login", (req, res) => {
-  const username = String(req.body?.username ?? "").trim().slice(0, 32);
-  if (!username) return res.status(400).json({ error: "Username required" });
+api.post("/signup", (req, res) => {
+  const username = String(req.body?.username ?? "").trim();
+  const password = String(req.body?.password ?? "");
+  const invalid = validateCredentials(username, password);
+  if (invalid) return res.status(400).json({ error: invalid });
 
-  let user = db.select().from(schema.users).where(eq(schema.users.username, username)).get();
-  if (!user) {
-    user = db
-      .insert(schema.users)
-      .values({ username, isGuest: false, createdAt: new Date() })
-      .returning()
-      .get();
+  const existing = db
+    .select({ id: schema.users.id })
+    .from(schema.users)
+    .where(eq(schema.users.username, username))
+    .get();
+  if (existing) return res.status(409).json({ error: "That codename is taken. Try another." });
+
+  const user = db
+    .insert(schema.users)
+    .values({ username, passwordHash: hashPassword(password), isGuest: false, createdAt: new Date() })
+    .returning()
+    .get();
+  req.session.userId = user.id;
+  // isNew tells the client to launch the first-time walkthrough.
+  res.json({ user: { id: user.id, username: user.username, isGuest: false }, isNew: true });
+});
+
+api.post("/login", (req, res) => {
+  const username = String(req.body?.username ?? "").trim();
+  const password = String(req.body?.password ?? "");
+  if (!username || !password) return res.status(400).json({ error: "Username and password required" });
+
+  const user = db.select().from(schema.users).where(eq(schema.users.username, username)).get();
+  // Same message for "no such user" and "wrong password" — don't leak which.
+  if (!user || user.isGuest || !verifyPassword(password, user.passwordHash)) {
+    return res.status(401).json({ error: "Wrong codename or password." });
   }
   req.session.userId = user.id;
-  res.json({ user: { id: user.id, username: user.username, isGuest: user.isGuest } });
+  res.json({ user: { id: user.id, username: user.username, isGuest: false }, isNew: false });
 });
 
 api.post("/guest", (req, res) => {
@@ -68,6 +90,10 @@ api.post("/guest", (req, res) => {
     .get();
   req.session.userId = user.id;
   res.json({ user: { id: user.id, username: user.username, isGuest: true } });
+});
+
+api.post("/logout", (req, res) => {
+  req.session.destroy(() => res.json({ ok: true }));
 });
 
 function tallies(userId: number) {

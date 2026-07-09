@@ -5,6 +5,7 @@ import { api } from "../api";
 import type { Me, ScenarioCard } from "../types";
 import Redaction from "../components/Redaction";
 import { SkeletonCard } from "../components/Skeleton";
+import AuthModal from "../components/AuthModal";
 
 /** Decorative evidence stack for the hero — the product's own artifacts,
  *  tilted like they were dropped on a desk. Pure markup, no images. */
@@ -50,26 +51,13 @@ export default function Welcome() {
     queryKey: ["scenarios"],
     queryFn: () => api.scenarios<{ scenarios: ScenarioCard[] }>(),
   });
-  const [username, setUsername] = useState("");
-  const [asking, setAsking] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [authMode, setAuthMode] = useState<null | "signup" | "login">(null);
 
-  async function enter(e?: React.FormEvent) {
-    e?.preventDefault();
-    if (me?.user) return nav("/gauntlet");
-    if (!asking) return setAsking(true);
-    if (!username.trim()) return;
-    setBusy(true);
-    setError(null);
-    try {
-      await api.login(username.trim());
-      await qc.invalidateQueries({ queryKey: ["me"] });
-      nav("/gauntlet");
-    } catch (err) {
-      setError((err as Error).message);
-      setBusy(false);
-    }
+  async function finishAuth(isNew: boolean) {
+    await qc.invalidateQueries({ queryKey: ["me"] });
+    setAuthMode(null);
+    // Fresh accounts land in the walkthrough; returning agents go straight in.
+    nav(isNew ? "/gauntlet?tour=1" : "/gauntlet");
   }
 
   return (
@@ -94,23 +82,22 @@ export default function Welcome() {
           exactly what every mistake would have cost you.
         </p>
 
-        <form onSubmit={enter} className="mt-7 flex flex-wrap items-center gap-3">
-          {asking && !me?.user && (
-            <input
-              autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Codename (username)"
-              maxLength={32}
-              className="paper-card shadow-none px-4 py-2 font-mono text-sm w-56"
-              aria-label="Username"
-            />
+        <div className="mt-7 flex flex-wrap items-center gap-3">
+          {me?.user ? (
+            <button className="btn-ink" onClick={() => nav("/gauntlet")}>
+              Enter the Gauntlet
+            </button>
+          ) : (
+            <>
+              <button className="btn-ink" onClick={() => setAuthMode("signup")}>
+                Create account &amp; start
+              </button>
+              <button className="btn" onClick={() => setAuthMode("login")}>
+                Log in
+              </button>
+            </>
           )}
-          <button type="submit" className="btn-ink" disabled={busy}>
-            {me?.user ? "Enter the Gauntlet" : asking ? "Begin training" : "Enter the Gauntlet"}
-          </button>
-          {error && <span className="text-redink font-mono text-xs">{error}</span>}
-        </form>
+        </div>
       </div>
       <EvidenceStack />
       </div>
@@ -147,6 +134,15 @@ export default function Welcome() {
           How the machine works
         </Link>
       </p>
+
+      {authMode && (
+        <AuthModal
+          initialMode={authMode}
+          onSuccess={finishAuth}
+          onGuest={() => finishAuth(false)}
+          onClose={() => setAuthMode(null)}
+        />
+      )}
     </div>
   );
 }
