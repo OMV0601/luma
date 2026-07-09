@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ScenarioDocument } from "../types";
+import { useFocusTrap } from "../useFocusTrap";
 
 /**
  * The embedded lease document. Planted clauses are tappable: tapping one
@@ -24,9 +25,9 @@ export default function LeaseDoc({
   const [plain, setPlain] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Dialog a11y: focus the panel on open, Escape closes.
+  // Dialog a11y: focus trapped in the panel (restored on close), Escape closes.
+  useFocusTrap(panelRef);
   useEffect(() => {
-    panelRef.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);

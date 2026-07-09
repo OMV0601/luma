@@ -16,6 +16,9 @@ import { SqliteSessionStore } from "./sessionStore.ts";
 seed();
 
 const app = express();
+// Render (and most PaaS) terminate TLS at their proxy; trust it so
+// secure:"auto" cookies work over HTTPS in prod and plain HTTP locally.
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(
   session({
@@ -23,7 +26,7 @@ app.use(
     secret: process.env.SESSION_SECRET || "foolproof-dev-secret",
     resave: false,
     saveUninitialized: false,
-    cookie: { httpOnly: true, sameSite: "lax", maxAge: 1000 * 60 * 60 * 24 * 30 },
+    cookie: { httpOnly: true, sameSite: "lax", secure: "auto", maxAge: 1000 * 60 * 60 * 24 * 30 },
   })
 );
 

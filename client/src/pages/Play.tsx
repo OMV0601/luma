@@ -3,12 +3,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { api } from "../api";
 
-const VALID = ["payday", "internship", "fraudcall", "lease"];
-
 /**
- * Judge Mode: /play?scenario=payday|internship|fraudcall|lease
+ * Judge Mode: /play?scenario=<slug> (default payday)
  * Instant guest session -> straight into a round. Built to be handed to a
- * judge during Q&A with zero setup.
+ * judge during Q&A with zero setup. The slug passes through untouched so
+ * Scam Factory-generated scenarios deep-link too; the server rejects
+ * unknown slugs.
  */
 export default function Play() {
   const nav = useNavigate();
@@ -19,9 +19,7 @@ export default function Play() {
   useEffect(() => {
     if (fired.current) return;
     fired.current = true;
-    const scenario = VALID.includes(params.get("scenario") ?? "")
-      ? params.get("scenario")!
-      : "payday";
+    const scenario = params.get("scenario") || "payday";
     (async () => {
       await api.guest();
       await qc.invalidateQueries({ queryKey: ["me"] });

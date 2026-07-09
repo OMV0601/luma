@@ -181,6 +181,7 @@ api.post("/round", (req, res) => {
       adversaryName: scenario.adversaryName,
       avatar: scenario.avatar,
       supportsVoice: scenario.supportsVoice,
+      callerId: playbook.callerId ?? null,
       decisions: playbook.decisions,
       document: playbook.document ?? null,
       beatCount: playbook.beats.length,
@@ -420,6 +421,10 @@ api.post("/round/:id/decide", async (req, res) => {
     ctx.challengedClauses = playbook.document.clauses
       .filter((c) => findings.some((f) => f.tacticId === c.tacticId && f.outcome === "caught"))
       .map((c) => c.id);
+  }
+  if (scenario.damageModel === "generic") {
+    // Scam Factory-generated scenarios carry their frozen damage spec in the playbook.
+    ctx.spec = playbook.damageSpec;
   }
 
   const damage = runDamage(scenario.damageModel, decision, ctx);

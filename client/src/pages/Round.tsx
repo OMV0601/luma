@@ -23,6 +23,7 @@ export default function Round() {
   const [busy, setBusy] = useState(false);
   const [deciding, setDeciding] = useState(false);
   const [decisionReady, setDecisionReady] = useState(false);
+  const [beat, setBeat] = useState(0); // 0-based index of the playbook beat in play
   const [error, setError] = useState<string | null>(null);
   const [picker, setPicker] = useState<number | null>(null); // messageId being flagged
   const [showDoc, setShowDoc] = useState(false);
@@ -42,7 +43,9 @@ export default function Round() {
         // /play deep-links land here without a user; auto-guest.
         const me = await api.me<{ user: unknown }>();
         if (!me.user) await api.guest();
-        const wantsVoice = scenarioId === "fraudcall" && voiceSupported();
+        // Voice is gated on the scenario's own supportsVoice flag (returned
+        // with the round) — any voice-capable scenario gets the call screen.
+        const wantsVoice = voiceSupported();
         const r = await api.startRound(scenarioId, wantsVoice);
         setRound(r);
         setMessages(r.messages);
@@ -76,6 +79,7 @@ export default function Round() {
         setDraft((d) => (d ?? "") + delta)
       );
       setMessages((m) => [...m, done.message]);
+      setBeat(done.beat);
       setDecisionReady((r) => r || done.decisionReady);
     } catch (err) {
       setError((err as Error).message);
@@ -152,6 +156,7 @@ export default function Round() {
   if (voice === "incoming") {
     return (
       <IncomingCall
+        caller={s.callerId}
         onAnswer={() => setVoice("active")}
         onDecline={() => decide("walk")}
       />
@@ -161,10 +166,9 @@ export default function Round() {
     return (
       <InCall
         callerName={s.adversaryName}
+        caller={s.callerId}
         lastAdversaryLine={draft === null ? (lastAdversary?.content ?? "") : ""}
-        speaking={true}
         busy={busy || deciding}
-        onSpeechEnd={() => {}}
         onUserSpeech={(text) => send(text)}
         onHangUp={() => decide("walk")}
         onTransfer={() => decide("take")}
@@ -186,6 +190,16 @@ export default function Round() {
             <h1 className="font-display text-sm truncate">{s.title.toUpperCase()}</h1>
             <p className="font-mono text-[10px] uppercase tracking-wider text-ink/50 truncate">
               subject: {s.adversaryName}
+              {s.beatCount > 0 && (
+                <span
+                  className="ml-2 text-ink/40"
+                  title="Case progress — the con has this many acts"
+                  aria-label={`Case progress: act ${Math.min(beat + 1, s.beatCount)} of ${s.beatCount}`}
+                >
+                  {"▮".repeat(Math.min(beat + 1, s.beatCount))}
+                  {"▯".repeat(Math.max(s.beatCount - beat - 1, 0))}
+                </span>
+              )}
             </p>
           </div>
         </div>

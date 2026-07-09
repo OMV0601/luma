@@ -1,0 +1,26 @@
+# Render Blueprint — one free web service: Express serves the built client
+# and the API together. Deploy: Render dashboard -> New -> Blueprint -> this
+# repo, then paste ANTHROPIC_API_KEY in the service's Environment tab.
+#
+# Known free-tier tradeoffs (fine for a hackathon demo):
+# - Ephemeral disk: SQLite resets on every deploy/restart; scenarios reseed
+#   at boot (including Scam Factory snapshots committed in
+#   server/src/generated/). User history just starts fresh.
+# - Spins down after ~15 min idle; first hit takes ~30-60s. Open the URL a
+#   couple of minutes before a demo, or point a free uptime pinger at
+#   /api/scenarios.
+services:
+  - type: web
+    name: foolproof
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/scenarios
+    envVars:
+      - key: NODE_VERSION
+        value: 24.12.0
+      - key: ANTHROPIC_API_KEY
+        sync: false # paste in the dashboard — never in git
+      - key: SESSION_SECRET
+        generateValue: true

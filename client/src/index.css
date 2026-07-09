@@ -75,5 +75,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .wave-bar, .shake { animation: none; }
+  /* Tailwind's own animation utilities must respect the preference too. */
+  .animate-pulse, .animate-bounce, .animate-spin { animation: none; }
   * { scroll-behavior: auto !important; }
 }

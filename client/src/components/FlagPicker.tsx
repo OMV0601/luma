@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { TACTICS } from "../../../shared/tactics";
+import { useFocusTrap } from "../useFocusTrap";
 
 /**
  * The "Call It Out" tactic picker — a bottom sheet listing the taxonomy.
@@ -16,9 +17,9 @@ export default function FlagPicker({
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Dialog a11y: focus the sheet on open, Escape closes.
+  // Dialog a11y: focus trapped in the sheet (restored on close), Escape closes.
+  useFocusTrap(panelRef);
   useEffect(() => {
-    panelRef.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);

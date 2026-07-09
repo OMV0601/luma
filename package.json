@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "FoolProof — get scammed here, so it never happens out there.",
+  "engines": {
+    "node": ">=24 <25"
+  },
   "workspaces": [
     "server",
     "client"
@@ -13,7 +16,8 @@
     "test": "npm run test -w server",
     "build": "npm run build -w client && npm run typecheck -w server",
     "start": "npm run start -w server",
-    "seed:reset": "npm run seed:reset -w server"
+    "seed:reset": "npm run seed:reset -w server",
+    "scam-factory": "npm run scam-factory -w server --"
   },
   "devDependencies": {
     "concurrently": "^9.0.0"

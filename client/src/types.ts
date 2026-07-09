@@ -55,6 +55,8 @@ export interface RoundScenario {
   adversaryName: string;
   avatar: string;
   supportsVoice: boolean;
+  /** voice scenarios: the (spoofed) caller the phone screen displays */
+  callerId: { name: string; number: string } | null;
   decisions: DecisionOption[];
   document: ScenarioDocument | null;
   beatCount: number;

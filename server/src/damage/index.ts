@@ -3,11 +3,14 @@ import { paydayDamage } from "./payday.ts";
 import { fraudcallDamage } from "./fraudcall.ts";
 import { leaseDamage } from "./lease.ts";
 import { internshipDamage } from "./internship.ts";
-import type { DamageResult } from "../types.ts";
+import { genericDamage } from "./generic.ts";
+import type { DamageResult, GenericDamageSpec } from "../types.ts";
 
 export interface DamageContext {
   upsold?: boolean;
   challengedClauses?: string[];
+  /** damage spec carried by Scam Factory-generated scenarios */
+  spec?: GenericDamageSpec;
 }
 
 export function runDamage(
@@ -24,6 +27,8 @@ export function runDamage(
       return leaseDamage(decision, ctx);
     case "internship":
       return internshipDamage(decision);
+    case "generic":
+      return genericDamage(ctx.spec, decision);
     default:
       throw new Error(`Unknown damage model "${model}"`);
   }

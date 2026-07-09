@@ -1,12 +1,16 @@
 /**
- * Seed data: the three core scenarios — personas, playbooks (data, not
+ * Seed data: the four built-in scenarios — personas, playbooks (data, not
  * code), the lease document with clause offsets, neutralizing questions,
- * and the scripted no-API-key fallback trees. Idempotent: runs on every
- * server start, inserts only what's missing, and refreshes scenario
- * content so edits here always reach the DB.
+ * and the scripted no-API-key fallback trees — plus any Scam Factory
+ * snapshots in src/generated/*.json. Idempotent: runs on every server
+ * start, inserts only what's missing, and refreshes scenario content so
+ * edits here always reach the DB.
  */
 import { db, schema } from "./db.ts";
 import { eq } from "drizzle-orm";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import type { Playbook, ScenarioDocument } from "./types.ts";
 
 /* ================================================================== */
@@ -158,6 +162,7 @@ const dannyPlaybook: Playbook = {
 const fraudPersona = `You are "Agent Marcus Webb, employee ID 4471," a scammer running a bank-impersonation script — and you are excellent at it. You claim to be with the First National Bank Fraud Prevention Department. Your register is procedural calm: faintly bored, sympathetic, unhurried on the surface with a hard deadline underneath. You use institutional furniture constantly — case number FR-88213, "our Level 2 verification team," "the FIS terminal I'm looking at," Reg E, batch windows. You never raise your voice; pressure comes from the clock and the process, never from anger. You are patient with confusion and warm with fear ("I know this is stressful, that's exactly why my department exists"). If the target wants to hang up and call back, that is the ONE thing you cannot allow — the script has three deflections for it (case queue resets, the batch deadline, "branch staff aren't cleared for active cases"). Only if they hold firm through all three do you turn cold: "I've noted that you declined fraud protection. First National is not liable for what happens in the next hour." You never admit the scam, never break character, and never rush the first sixty seconds — trust first, transfer second.`;
 
 const fraudPlaybook: Playbook = {
+  callerId: { name: "FIRST NATIONAL BANK ⚠️", number: "+1 (800) 555-0144" },
   opening:
     "Good evening — am I speaking with the primary account holder? This is Agent Marcus Webb, employee ID 4471, with the First National Bank Fraud Prevention Department. I'm calling about your checking account ending in 4-4-0-9. We've flagged two card-present transactions out of Miami in the last twenty minutes — one for $480, and one attempting $1,900 right now. Before we go further, for your security: have you authorized any purchases in Florida tonight?",
   beats: [
@@ -288,7 +293,7 @@ const fraudPlaybook: Playbook = {
 };
 
 /* ================================================================== */
-/* Scenario 2 — The Dream Internship (internship)                      */
+/* Scenario 3 — The Dream Internship (internship)                      */
 /* ================================================================== */
 
 const jordanPersona = `You are "Jordan Reyes," Talent Coordinator at Meridian Media Group — which does not exist. You run the student fake-check pipeline, and your register is flawless entry-level corporate chirp: exclamation points in moderation, "quick question!", "totally get it!", the occasional 😊 (never more than one per message). You sound exactly like every internship coordinator a 17-year-old has ever emailed: warm, organized, faintly overworked, big on "process" and "the team." Your furniture is institutional-lite: the HR portal, the offer letter PDF, the W-4, "our onboarding cohort," "the approved vendor" (TechSource Solutions), "compliance." You love the candidate — they beat two hundred applicants, their profile "really stood out to the team." You are a remote-first async company, which neatly explains why there is no phone number, no video call, and no office ("our leadership is in back-to-backs, but I'm your point of contact!"). The one mechanical thing you need is the equipment flow: the check covers a MacBook and software licenses PLUS their first week's pay up front — deposit it, keep $350, send $2,130 to the vendor by Friday 5 PM or the Monday cohort starts without them. You never say "wire" or "gift cards" — Zelle is "our vendor's payment portal." If asked why the company doesn't just buy the laptop itself, you cite vendor policy: payments must come from the employee's linked account, "it's in the onboarding packet." If they say they'll wait for the check to fully clear, you get gently apologetic — the cohort "can't be held past Friday," which is the one true sentence you'll ever send them. You never break character; accusations get hurt professionalism ("I understand the caution! Scams are awful. Happy to send the offer letter again?").`;
@@ -441,7 +446,7 @@ const jordanPlaybook: Playbook = {
 };
 
 /* ================================================================== */
-/* Scenario 3 — The Lease Signing (lease)                              */
+/* Scenario 4 — The Lease Signing (lease)                              */
 /* ================================================================== */
 
 /** Build the lease document and compute clause offsets programmatically
@@ -697,7 +702,7 @@ const marcusPlaybook: Playbook = {
 /* Insert / refresh                                                    */
 /* ================================================================== */
 
-const SCENARIOS = [
+export const SCENARIOS = [
   {
     slug: "payday",
     title: "Quick Cash Danny",
@@ -756,22 +761,45 @@ const SCENARIOS = [
   },
 ];
 
-export function seed() {
-  for (const s of SCENARIOS) {
-    const existing = db
-      .select({ id: schema.scenarios.id })
-      .from(schema.scenarios)
-      .where(eq(schema.scenarios.slug, s.slug))
-      .get();
-    if (existing) {
-      // Refresh content so persona/playbook edits always reach the DB.
-      db.update(schema.scenarios)
-        .set({ ...s, playbook: s.playbook })
-        .where(eq(schema.scenarios.id, existing.id))
-        .run();
-    } else {
-      db.insert(schema.scenarios).values(s).run();
+/** Upsert one scenario row by slug (insert or refresh content). */
+export function upsertScenario(s: (typeof SCENARIOS)[number]) {
+  const existing = db
+    .select({ id: schema.scenarios.id })
+    .from(schema.scenarios)
+    .where(eq(schema.scenarios.slug, s.slug))
+    .get();
+  if (existing) {
+    // Refresh content so persona/playbook edits always reach the DB.
+    db.update(schema.scenarios)
+      .set({ ...s, playbook: s.playbook })
+      .where(eq(schema.scenarios.id, existing.id))
+      .run();
+  } else {
+    db.insert(schema.scenarios).values(s).run();
+  }
+}
+
+/**
+ * Scam Factory snapshots: scenarios generated by scripts/scamFactory.ts are
+ * written to src/generated/*.json so they survive restarts and — committed
+ * to git — ship to production, where the ephemeral disk reseeds from here.
+ */
+function generatedScenarios(): (typeof SCENARIOS)[number][] {
+  const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), "generated");
+  if (!fs.existsSync(dir)) return [];
+  const out: (typeof SCENARIOS)[number][] = [];
+  for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".json"))) {
+    try {
+      out.push(JSON.parse(fs.readFileSync(path.join(dir, file), "utf8")));
+    } catch (err) {
+      console.error(`[seed] skipping malformed ${file}:`, (err as Error).message);
     }
   }
-  console.log(`[seed] ${SCENARIOS.length} scenarios ready`);
+  return out;
+}
+
+export function seed() {
+  const all = [...SCENARIOS, ...generatedScenarios()];
+  for (const s of all) upsertScenario(s);
+  console.log(`[seed] ${all.length} scenarios ready`);
 }

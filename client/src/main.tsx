@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Codex from "./pages/Codex";
 import Play from "./pages/Play";
 import Institutions from "./pages/Institutions";
+import Architecture from "./pages/Architecture";
 import "./index.css";
 
 const queryClient = new QueryClient({
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: "/profile", element: <Profile /> },
       { path: "/codex", element: <Codex /> },
       { path: "/for-institutions", element: <Institutions /> },
+      { path: "/architecture", element: <Architecture /> },
     ],
   },
 ]);

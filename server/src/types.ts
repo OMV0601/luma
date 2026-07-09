@@ -58,6 +58,28 @@ export interface FallbackTree {
   filler: string[];
 }
 
+/** One line item in a Scam Factory-generated damage spec. */
+export interface GenericDamageRow {
+  label: string;
+  amount: number; // positive integer dollars (validated + rounded at generation)
+  note: string;
+  /** true = renders behind a redaction bar in the Evidence File */
+  buried?: boolean;
+  /** true = dropped from the bill under a "negotiated" decision */
+  negotiable?: boolean;
+}
+
+/**
+ * Frozen damage data for generated scenarios (damageModel: "generic").
+ * Proposed once by the Scam Factory LLM call, validated, then treated as
+ * deterministic input — headlines use {total}/{paid}/{avoided} placeholders
+ * that the engine substitutes, so prose can never contradict arithmetic.
+ */
+export interface GenericDamageSpec {
+  rows: GenericDamageRow[]; // 2..6
+  headlines: { take: string; negotiated?: string; walk: string };
+}
+
 export interface Playbook {
   opening: string;
   beats: Beat[];
@@ -67,6 +89,10 @@ export interface Playbook {
   decisions: DecisionOption[];
   document?: ScenarioDocument;
   fallback: FallbackTree;
+  /** present only on Scam Factory-generated scenarios (damageModel: "generic") */
+  damageSpec?: GenericDamageSpec;
+  /** voice scenarios: what the phone screen shows as the (spoofed) caller */
+  callerId?: { name: string; number: string };
 }
 
 export interface Finding {

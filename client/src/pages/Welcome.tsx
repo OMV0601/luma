@@ -142,6 +142,10 @@ export default function Welcome() {
         <Link to="/for-institutions" className="underline underline-offset-4 hover:text-ink">
           FoolProof for institutions →
         </Link>
+        <span className="mx-2 text-ink/30" aria-hidden>·</span>
+        <Link to="/architecture" className="underline underline-offset-4 hover:text-ink">
+          How the machine works
+        </Link>
       </p>
     </div>
   );
