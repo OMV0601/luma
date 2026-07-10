@@ -75,11 +75,17 @@ function Typewriter({ text, onDone }: { text: string; onDone?: () => void }) {
   const [shown, setShown] = useState(reduce ? text.length : 0);
   const firedRef = useRef(false);
 
+  // Hold onDone in a ref: the parent re-renders every progress-bar frame,
+  // and a fresh callback identity must NOT restart the typing effect
+  // (that reset the text to zero chars on every frame — blank popup).
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
+
   const finish = useCallback(() => {
     if (firedRef.current) return;
     firedRef.current = true;
-    onDone?.();
-  }, [onDone]);
+    onDoneRef.current?.();
+  }, []);
 
   useEffect(() => {
     firedRef.current = false;
@@ -290,7 +296,8 @@ export default function DemoTour() {
       last = now;
       if (!pausedRef.current) acc += dt;
       const p = Math.min(1, acc / dwell);
-      setProgress(p);
+      // Integer percent: re-render the popup ~100 times per dwell, not 60/sec.
+      setProgress((prev) => (Math.round(p * 100) === prev ? prev : Math.round(p * 100)));
       if (p >= 1 && !fired) {
         fired = true;
         if (idx + 1 >= steps.length) endToApp();
@@ -478,10 +485,7 @@ export default function DemoTour() {
               <div className="mt-4">
                 {/* dwell progress */}
                 <div className="h-1 rounded-full bg-ink/15 overflow-hidden">
-                  <div
-                    className="h-full bg-redink"
-                    style={{ width: `${Math.round(progress * 100)}%` }}
-                  />
+                  <div className="h-full bg-redink" style={{ width: `${progress}%` }} />
                 </div>
                 <div className="mt-2 flex items-center justify-between gap-2">
                   <span className="font-mono text-[10px] text-ink/50">
