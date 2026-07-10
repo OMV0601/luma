@@ -205,7 +205,11 @@ export default function Round() {
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {s.document && (
-            <button className="btn px-2 py-1.5 text-xs" onClick={() => setShowDoc(true)}>
+            <button
+              className="btn px-2 py-1.5 text-xs"
+              onClick={() => setShowDoc(true)}
+              data-tour="doc-btn"
+            >
               <FileText className="h-3.5 w-3.5" /> Lease
             </button>
           )}

@@ -29,7 +29,7 @@
 - [ ] A file `alert.txt` in the repo root containing a real, *different* FTC scam alert (not the toll one — grab a current one, e.g. the fake-job or QR-code parking scam, ~10 lines of text). This is for the live Scam Factory shot.
 - [ ] Terminal open, font size bumped to ~18pt, ready in the repo root
 - [ ] Tabs pre-opened in order: `localhost:5173/play?scenario=fraudcall` · `/` (welcome) · `/architecture` · `/play?scenario=payday` · `/for-institutions` · end-card image
-- [ ] Run the self-driving tour once end-to-end: Welcome → **▶ Watch it demo itself** (16 steps, ~3 min, it plays a real round). It must be green — it's your nuclear fallback (below) and the judges' leave-behind.
+- [ ] Run the auto-demo once end-to-end: Welcome → **▶ Watch the auto-demo** (~3 min hands-free — it plays a real round AND tours voice mode, the jargon translator, the Codex, and accessibility). It must be green — it's your nuclear fallback (below) and the judges' leave-behind. (There's also a **Take a guided tour** button — same drive, but the viewer clicks through at their own pace.)
 - [ ] Timer visible to the driver only (phone propped up)
 
 ### The three speaking rules (latency insurance)
@@ -130,7 +130,7 @@
 
 ### 4:30–5:00 · BUSINESS + CLOSE — **CLOSER**
 
-**[SCREEN]** `/for-institutions`, then the end card (QR + live URL). *(The landing page behind that QR opens with **▶ Watch it demo itself** — a self-driving tour that plays a real round with spotlights and popup cards. After this video ends, the app is its own salesperson.)*
+**[SCREEN]** `/for-institutions`, then the end card (QR + live URL). *(The landing page behind that QR opens with **▶ Watch the auto-demo** — a fully hands-free run that plays a real round and tours every feature with spotlights and popup cards. After this video ends, the app is its own salesperson.)*
 
 **CLOSER:**
 > "Who pays? This is **KnowBe4 for consumers.** Simulated phishing built a multi-billion-dollar category training employees — we train everyone else. Banks and credit unions license it as a member benefit, because scam reimbursement is now a line on their P&L and we are measurable loss-prevention, white-labeled as the brand scammers actually impersonate. Schools second — personal finance is a graduation requirement in most states, and the Evidence File is gradeable coursework. Consumers are the funnel: four dollars a month, a new adversary every month, because the scams don't stop evolving — and now, neither do we."
@@ -149,8 +149,8 @@
 - [ ] Watch the whole recording once: is the scammer's TTS voice audible? Is every speaker's audio clean? Did the un-redaction render on camera?
 - [ ] Check total length ≤ 5:00 — trim dead air at the start/end; nothing else needs editing if the take was clean.
 - [ ] Keep take two even if take one was good. Submit the better file.
-- [ ] Same rig, same roles for live Q&A day — plus `QA_PREP.md` re-read out loud by all three, and two links pre-loaded to hand the judges: `/play?scenario=payday` (the chair) and the Welcome page's **▶ Watch it demo itself** (the guided tour — for the judge who'd rather watch than play).
+- [ ] Same rig, same roles for live Q&A day — plus `QA_PREP.md` re-read out loud by all three, and two things pre-loaded to hand the judges: `/play?scenario=payday` (the chair, for a judge who wants to play) and the Welcome page's **Take a guided tour** (for a judge who'd rather click through at their own pace). Use **▶ Watch the auto-demo** if they'd rather just watch.
 
 **Timing insurance:** if a live model reply is slow during the demo, the DRIVER talks *over the wait* (the lines above are written to cover it) — never stand in silence watching a cursor. If anything hard-breaks mid-take: stop, `npm run seed:reset`, breathe, take two. That's what it's for.
 
-**Nuclear option:** if the DRIVER can't drive at all (internet, hardware, nerves), open the Welcome page and click **▶ Watch it demo itself**. The app takes the cursor and runs the entire demo itself — types the probe question into a real round, flags the tactic, takes the deal, opens the Evidence File, ends on the business page — and it **pauses on every popup card until you click Next**, so the DRIVER (or any teammate) narrates at their own pace over the top. The demo literally cannot be fumbled: the product does the clicking.
+**Nuclear option:** if the DRIVER can't drive at all (internet, hardware, nerves), open the Welcome page and click **▶ Watch the auto-demo**. The app takes the cursor and runs the entire demo itself, fully hands-free — types the probe question into a real round, flags the tactic, takes the deal, opens the Evidence File, tours the Codex and accessibility, answers a voice-mode scam call and hangs up, opens the lease jargon-translator, ends on the business page. It auto-advances on a timer with a visible progress bar; a teammate narrates over the top and can hit **Pause** (or Space) anytime to hold a card longer. If you'd rather control the pace by hand, use **Take a guided tour** instead — same drive, Next-button paced. The demo literally cannot be fumbled: the product does the clicking.

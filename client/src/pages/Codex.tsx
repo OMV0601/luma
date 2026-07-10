@@ -21,7 +21,7 @@ export default function Codex() {
         Every con is one of ten moves. Entries unlock when someone runs one on you.
       </p>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2" data-tour="codex">
         {!data
           ? [1, 2, 3, 4].map((i) => <SkeletonCard key={i} />)
           : data.tactics.map((t) =>

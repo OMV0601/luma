@@ -101,6 +101,7 @@ export default function LeaseDoc({
               className={`btn px-2 py-1 text-xs ${plain ? "bg-verified/15 border-verified text-verified" : ""}`}
               onClick={() => setPlain(!plain)}
               aria-pressed={plain}
+              data-tour="plain-toggle"
             >
               {plain ? "✓ Plain English" : "Plain English"}
             </button>
@@ -124,7 +125,7 @@ export default function LeaseDoc({
         )}
 
         {plain ? (
-          <div className="overflow-y-auto px-5 py-4 space-y-4">
+          <div className="overflow-y-auto px-5 py-4 space-y-4" data-tour="lease-plain">
             {paragraphs.map((p, i) => (
               <div key={i}>
                 <p className="font-mono text-[12.5px] leading-relaxed whitespace-pre-wrap">

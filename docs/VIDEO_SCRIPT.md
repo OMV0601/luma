@@ -52,7 +52,7 @@ Run `npm run seed:reset && npm run dev` before recording. Practice the demo path
 
 ## 2:00–4:00 — THE DEMO (Innovation & UX)
 
-**The demo track is the app itself.** On the Welcome page, click **▶ Watch it demo itself**
+**The demo track is the app itself.** On the Welcome page, click **▶ Watch the auto-demo**
 and narrate over the self-driving tour. It takes the cursor, plays a REAL round (nothing
 mocked), and **pauses on every popup card until you click Next** — so your narration sets
 the pace, and there is nothing to fumble on camera.

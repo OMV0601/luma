@@ -6,7 +6,7 @@ import type { Me, ScenarioCard } from "../types";
 import Redaction from "../components/Redaction";
 import { SkeletonCard } from "../components/Skeleton";
 import AuthModal from "../components/AuthModal";
-import { startDemoTour } from "../tour/DemoTour";
+import { startAutoDemo, startGuidedTour } from "../tour/DemoTour";
 
 /** Decorative evidence stack for the hero — the product's own artifacts,
  *  tilted like they were dropped on a desk. Pure markup, no images. */
@@ -98,10 +98,16 @@ export default function Welcome() {
               </button>
             </>
           )}
-          <button type="button" className="btn" onClick={startDemoTour}>
-            ▶ Watch it demo itself
+          <button type="button" className="btn-ink" onClick={startAutoDemo}>
+            ▶ Watch the auto-demo
+          </button>
+          <button type="button" className="btn" onClick={startGuidedTour}>
+            Take a guided tour
           </button>
         </div>
+        <p className="mt-2 font-mono text-[11px] text-ink/50">
+          Auto-demo: sit back, it runs itself (~3 min). Guided tour: click through at your pace.
+        </p>
       </div>
       <EvidenceStack />
       </div>

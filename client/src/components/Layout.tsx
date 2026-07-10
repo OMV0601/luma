@@ -77,6 +77,7 @@ export default function Layout() {
                 aria-pressed={readable}
                 aria-label="Toggle readable font (Atkinson Hyperlegible)"
                 title="Readable font"
+                data-tour="readable"
                 className={`border-2 rounded-md p-2 transition-colors ${
                   readable
                     ? "border-verified text-verified bg-verified/10"

@@ -2,7 +2,13 @@
  * The self-driving demo script — data, not code, like everything else here.
  * Each step optionally navigates, runs automated actions (the tour drives a
  * REAL round against the scripted/live adversary — nothing is mocked), then
- * spotlights one region and pauses on a popup until the viewer clicks Next.
+ * spotlights one region and shows a case-file popup.
+ *
+ * Two audiences share this one script:
+ *   • AUTO  — the hands-free video demo. Plays every step (incl. autoOnly),
+ *             types/clicks itself, and advances on a timer. For judges.
+ *   • GUIDED — the self-guided tour. Skips autoOnly steps and waits for the
+ *             viewer to press Next. For users exploring on their own.
  *
  * Selectors support a "::last" suffix (last match wins) for message bubbles.
  */
@@ -26,10 +32,16 @@ export interface TourStep {
   actions?: TourAction[];
   /** spotlight this element; omit for a centered narration card */
   target?: string;
-  /** skip silently if the target never appears (e.g. Wolfram badge without a key) */
+  /** skip silently if the target/actions fail (e.g. Wolfram badge, voice) */
   optional?: boolean;
+  /** only shown in the hands-free auto demo — the feature-showcase extras */
+  autoOnly?: boolean;
+  /** auto-mode dwell after the text finishes typing (ms); default scales with length */
+  dwellMs?: number;
   title: string;
   body: string;
+  /** override copy in auto mode (the two modes read differently) */
+  bodyAuto?: string;
 }
 
 const PROBE_QUESTION =
@@ -40,7 +52,9 @@ export const TOUR_STEPS: TourStep[] = [
     id: "intro",
     route: "/",
     title: "THE CASE BRIEFING",
-    body: "FoolProof is about to demo itself. It will take the cursor, play a real round against a scam character, and open the evidence. Nothing is mocked or pre-recorded — this is the live app. Read at your pace; Next advances, Esc bails out.",
+    body: "This is a self-driving tour. It takes the cursor, plays a real round against a scam character, and opens the evidence — nothing is mocked or pre-recorded. Read at your pace: Next advances, Esc bails out.",
+    bodyAuto:
+      "Sit back — FoolProof is about to demo itself, hands-free. It takes the cursor, plays a real round against a live scam character, opens the evidence, and tours every feature. Nothing is mocked. Pause or Exit anytime; Esc quits.",
   },
   {
     id: "problem",
@@ -58,7 +72,7 @@ export const TOUR_STEPS: TourStep[] = [
     id: "enter",
     actions: [{ type: "ensure-guest" }],
     title: "MEET JORDAN",
-    body: "The Dream Internship: the number-one scam hitting students right now — a dream job DM, a check in the mail, and a favor to repay. The tour will play the round for you. Watch the cursor.",
+    body: "The Dream Internship: the number-one scam hitting students right now — a dream job DM, a check in the mail, and a favor to repay. The tour plays the round for you now. Watch the cursor.",
   },
   {
     id: "scene",
@@ -112,7 +126,7 @@ export const TOUR_STEPS: TourStep[] = [
     timeoutMs: 30000,
     target: '[data-tour="damage"]',
     title: "WE TOOK THE DEAL — ON PURPOSE",
-    body: "This is the Evidence File. The damage figure is not AI output: it's a deterministic TypeScript engine — the Reg CC fake-check timeline, 24 unit tests — that prices the mistake at $2,165. Losing here is the product working.",
+    body: "This is the Evidence File. The damage figure is not AI output: it's a deterministic TypeScript engine — the Reg CC fake-check timeline, 27 unit tests — that prices the mistake at $2,165. Losing here is the product working.",
   },
   {
     id: "breakdown",
@@ -135,12 +149,76 @@ export const TOUR_STEPS: TourStep[] = [
     body: "A second, independent AI grades the round — the scammer never grades its own exam. Every manipulation attempt is stamped in the margin: CAUGHT, RESISTED, or FELL FOR IT, each with the exact quote as evidence.",
   },
   {
+    id: "codex",
+    autoOnly: true,
+    route: "/codex",
+    waitFor: '[data-tour="codex"]',
+    target: '[data-tour="codex"]',
+    title: "THE TACTIC CODEX",
+    body: "Every con is one of ten named moves. Entries unlock the moment a scammer runs one on you — we teach at the point of failure, never as a lesson module. Each opens with a real-world example and the counter-move that defuses it.",
+  },
+  {
     id: "radar",
     route: "/profile",
     waitFor: '[data-tour="radar"]',
     target: '[data-tour="radar"]',
     title: "STREET SMARTS",
     body: "The round you just watched is already on this profile: money protected vs lost, and a catch-rate radar across all ten tactics. Weak spots are visible, so the next round targets them. That's the retention loop.",
+  },
+  {
+    id: "accessibility",
+    autoOnly: true,
+    optional: true,
+    actions: [{ type: "click", selector: '[data-tour="readable"]' }, { type: "sleep", ms: 600 }],
+    target: '[data-tour="readable"]',
+    title: "BUILT TO BE READ",
+    body: "One tap swaps the entire app to Atkinson Hyperlegible — a typeface designed for low vision and dyslexia. Jargon already excludes people; the interface shouldn't pile on. Captions, keyboard nav, and reduced-motion are first-class too.",
+  },
+  {
+    id: "voice-call",
+    autoOnly: true,
+    optional: true,
+    route: "/round/fraudcall",
+    waitFor: '[data-tour="answer-call"]',
+    timeoutMs: 12000,
+    target: '[data-tour="incoming-call"]',
+    title: "IT ALSO RINGS",
+    body: "The costliest scams arrive by phone. This is the bank-imposter case — spoofed caller ID, a real ringtone, the panic script loaded. The most dangerous channel gets the full treatment, not a text box.",
+  },
+  {
+    id: "voice-live",
+    autoOnly: true,
+    optional: true,
+    actions: [{ type: "click", selector: '[data-tour="answer-call"]' }, { type: "sleep", ms: 1000 }],
+    target: '[data-tour="call-screen"]',
+    title: "A VOICE, LIVE CAPTIONS",
+    body: "Answered. The scammer speaks aloud through the browser while every word renders as a live caption, a waveform pulses, and the call timer runs. Voice and text share one engine — and one referee grading the outcome.",
+  },
+  {
+    id: "voice-win",
+    autoOnly: true,
+    optional: true,
+    actions: [{ type: "click", selector: '[data-tour="hangup"]' }],
+    timeoutMs: 30000,
+    target: '[data-tour="damage"]',
+    title: "THE BORING MOVE WINS",
+    body: "Hang up, call the number on your card. That reflex just protected $4,800 — same evidence file, opposite outcome: a green CASE CLOSED instead of a red MARK.",
+  },
+  {
+    id: "plain-english",
+    autoOnly: true,
+    optional: true,
+    route: "/round/lease",
+    waitFor: '[data-tour="composer"]',
+    actions: [
+      { type: "click", selector: '[data-tour="doc-btn"]' },
+      { type: "sleep", ms: 500 },
+      { type: "click", selector: '[data-tour="plain-toggle"]' },
+      { type: "sleep", ms: 500 },
+    ],
+    target: '[data-tour="lease-plain"]',
+    title: "THE JARGON TRANSLATOR",
+    body: "The landlord case hands you a real 18-clause lease. One tap rewrites every clause into plain English — and the traps expose themselves: the auto-renewal, the non-refundable fee, the repairs you'd secretly owe. Jargon is where the money hides.",
   },
   {
     id: "business",
@@ -154,5 +232,7 @@ export const TOUR_STEPS: TourStep[] = [
     id: "close",
     title: "YOUR TURN",
     body: "Get scammed here — so it never happens out there. The Gauntlet is open: five adversaries, multiple endings each, and an Evidence File with your name on it.",
+    bodyAuto:
+      "That's the whole loop — five adversaries, voice and document scams, a jargon translator, provable damage math, and an evidence file with your name on it. Get scammed here, so it never happens out there.",
   },
 ];

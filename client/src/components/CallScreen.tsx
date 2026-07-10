@@ -77,7 +77,10 @@ export function IncomingCall({
   const id = caller ?? FALLBACK_CALLER;
   useRingTone(true);
   return (
-    <div className="fixed inset-0 z-40 bg-ink text-paper-bright flex flex-col items-center justify-between py-16 px-6 safe-t safe-b">
+    <div
+      className="fixed inset-0 z-40 bg-ink text-paper-bright flex flex-col items-center justify-between py-16 px-6 safe-t safe-b"
+      data-tour="incoming-call"
+    >
       <div className="text-center">
         <p className="font-mono text-xs uppercase tracking-widest text-paper-bright/60">
           incoming call
@@ -98,6 +101,7 @@ export function IncomingCall({
         </button>
         <button
           onClick={onAnswer}
+          data-tour="answer-call"
           className="h-16 w-16 rounded-full bg-verified flex items-center justify-center animate-bounce focus-visible:outline focus-visible:outline-2 focus-visible:outline-paper-bright"
           aria-label="Answer call"
         >
@@ -184,7 +188,10 @@ export function InCall({
   }
 
   return (
-    <div className="fixed inset-0 z-40 bg-ink text-paper-bright flex flex-col py-8 px-5 safe-t safe-b">
+    <div
+      className="fixed inset-0 z-40 bg-ink text-paper-bright flex flex-col py-8 px-5 safe-t safe-b"
+      data-tour="call-screen"
+    >
       <div className="text-center">
         <p className="font-mono text-[10px] uppercase tracking-widest text-redink">
           ⚠ unverified caller
@@ -246,6 +253,7 @@ export function InCall({
           <button
             onClick={onHangUp}
             disabled={busy}
+            data-tour="hangup"
             className="flex-1 bg-verified text-ink border-2 border-verified rounded-md py-3 font-mono text-xs uppercase tracking-wider font-bold flex items-center justify-center gap-2"
           >
             <PhoneOff className="h-4 w-4" /> Hang up & call my card
