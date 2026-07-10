@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { motion, useReducedMotion } from "framer-motion";
 import { api } from "../api";
 import { TOUR_STEPS, type TourStep, type TourAction } from "./steps";
@@ -140,6 +141,7 @@ function popupPosition(box: Box): React.CSSProperties {
 
 export default function DemoTour() {
   const nav = useNavigate();
+  const qc = useQueryClient();
   const reduce = useReducedMotion();
 
   const [mode, setMode] = useState<TourMode>("guided");
@@ -320,7 +322,12 @@ export default function DemoTour() {
         switch (a.type) {
           case "ensure-guest": {
             const me = await api.me<{ user: unknown }>();
-            if (!me.user) await api.guest();
+            if (!me.user) {
+              await api.guest();
+              // Refresh the cached ["me"] — otherwise the Gauntlet's
+              // not-logged-in guard bounces the viewer to "/" at demo end.
+              await qc.invalidateQueries({ queryKey: ["me"] });
+            }
             break;
           }
           case "sleep":
