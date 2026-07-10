@@ -53,6 +53,42 @@ interface Box {
   height: number;
 }
 
+/**
+ * Types the popup body out in real time (case-file teletype). Clicking the
+ * text completes it instantly; reduced motion renders it whole.
+ */
+function Typewriter({ text }: { text: string }) {
+  const reduce = useReducedMotion();
+  const [shown, setShown] = useState(reduce ? text.length : 0);
+
+  useEffect(() => {
+    if (reduce) {
+      setShown(text.length);
+      return;
+    }
+    setShown(0);
+    let i = 0;
+    const timer = setInterval(() => {
+      i += 2; // two chars per tick ≈ 100 chars/sec — brisk, still visibly typed
+      setShown(i);
+      if (i >= text.length) clearInterval(timer);
+    }, 20);
+    return () => clearInterval(timer);
+  }, [text, reduce]);
+
+  const done = shown >= text.length;
+  return (
+    <span onClick={() => setShown(text.length)} className={done ? "" : "cursor-pointer"}>
+      {text.slice(0, shown)}
+      {!done && (
+        <span className="animate-pulse" aria-hidden>
+          ▌
+        </span>
+      )}
+    </span>
+  );
+}
+
 const PAD = 8;
 const POPUP_W = 352;
 
@@ -86,6 +122,9 @@ export default function DemoTour() {
   const [phase, setPhase] = useState<"acting" | "reading">("acting");
   const [box, setBox] = useState<Box | null>(null);
   const [pulse, setPulse] = useState(0);
+  // The fake cursor earns its screen time: visible only while it's actually
+  // moving/clicking/typing, never parked in a corner.
+  const [cursorOn, setCursorOn] = useState(false);
 
   const cursorRef = useRef<HTMLDivElement>(null);
   const posRef = useRef({ x: -100, y: -100 });
@@ -132,6 +171,7 @@ export default function DemoTour() {
     runRef.current += 1; // cancel any in-flight step
     setIdx(null);
     setBox(null);
+    setCursorOn(false);
     targetElRef.current = null;
   }, []);
 
@@ -201,6 +241,7 @@ export default function DemoTour() {
             el.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
             await sleep(reduce ? 40 : 380);
             if (!alive()) return false;
+            setCursorOn(true);
             await moveCursorTo(el);
             setPulse((p) => p + 1);
             await sleep(reduce ? 40 : 180);
@@ -271,6 +312,7 @@ export default function DemoTour() {
         if (!alive()) return;
         setBox(measureBox(el));
       }
+      setCursorOn(false); // reading time — the cursor has nothing to do
       setPhase("reading");
     })();
   }, [idx]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -330,7 +372,9 @@ export default function DemoTour() {
             <p className="stamp-text text-[10px] font-bold text-redink">
               {step.title}
             </p>
-            <p className="text-sm mt-2 leading-snug text-ink/90">{step.body}</p>
+            <p className="text-sm mt-2 leading-snug text-ink/90">
+              <Typewriter key={step.id} text={step.body} />
+            </p>
             <div className="mt-4 flex items-center justify-between gap-2">
               <span className="font-mono text-[10px] text-ink/50">
                 {idx + 1} / {TOUR_STEPS.length}
@@ -360,12 +404,15 @@ export default function DemoTour() {
         </div>
       )}
 
-      {/* The fake cursor. */}
+      {/* The fake cursor — only on screen while it's actually working. */}
       <div
         ref={cursorRef}
         aria-hidden
-        className="fixed left-0 top-0 z-[80] pointer-events-none"
-        style={{ transform: `translate(${posRef.current.x}px, ${posRef.current.y}px)` }}
+        className="fixed left-0 top-0 z-[80] pointer-events-none transition-opacity duration-300"
+        style={{
+          transform: `translate(${posRef.current.x}px, ${posRef.current.y}px)`,
+          opacity: cursorOn ? 1 : 0,
+        }}
       >
         <svg width="26" height="30" viewBox="0 0 26 30" className="drop-shadow-md">
           <path
