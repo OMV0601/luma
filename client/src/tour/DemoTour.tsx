@@ -30,8 +30,12 @@ export const startGuidedTour = () =>
 export const startDemoTour = startAutoDemo;
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-const DWELL_MIN = 2600;
-const DWELL_MAX = 5400;
+// Dwell runs AFTER the text finishes typing — most of the reading already
+// happened during the (slow) typewriter, so the bar itself stays brisk.
+const DWELL_MIN = 1500;
+const DWELL_MAX = 3200;
+/** breath between auto-mode steps, so cards don't slam into each other */
+const STEP_GAP = 700;
 
 /** querySelector with a "::last" suffix (last match wins). */
 function resolveEl(selector: string): HTMLElement | null {
@@ -97,13 +101,13 @@ function Typewriter({ text, onDone }: { text: string; onDone?: () => void }) {
     setShown(0);
     let i = 0;
     const timer = setInterval(() => {
-      i += 2; // ~100 chars/sec — brisk, still visibly typed
+      i += 1; // ~45 chars/sec — slow enough to watch it being typed
       setShown(i);
       if (i >= text.length) {
         clearInterval(timer);
         finish();
       }
-    }, 20);
+    }, 22);
     return () => clearInterval(timer);
   }, [text, reduce, finish]);
 
@@ -285,7 +289,7 @@ export default function DemoTour() {
     if (mode !== "auto" || phase !== "reading" || !typingDone || idx === null) return;
     const step = steps[idx];
     const body = bodyFor(step);
-    const dwell = step.dwellMs ?? Math.min(DWELL_MAX, Math.max(DWELL_MIN, body.length * 22));
+    const dwell = step.dwellMs ?? Math.min(DWELL_MAX, Math.max(DWELL_MIN, body.length * 10));
     let raf = 0;
     let last = performance.now();
     let acc = 0;
@@ -344,14 +348,14 @@ export default function DemoTour() {
             if (!(await waitUntil(() => Boolean(resolveEl(a.selector!)), 9000))) return false;
             const el = resolveEl(a.selector!)!;
             el.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
-            await sleep(reduce ? 40 : 380);
+            await sleep(reduce ? 40 : 480);
             if (!alive()) return false;
             setCursorOn(true);
             await moveCursorTo(el);
             setPulse((p) => p + 1);
-            await sleep(reduce ? 40 : 180);
+            await sleep(reduce ? 40 : 220);
             el.click();
-            await sleep(reduce ? 80 : 320);
+            await sleep(reduce ? 80 : 420);
             break;
           }
           case "type": {
@@ -382,6 +386,10 @@ export default function DemoTour() {
       setTypingDone(false);
       setBox(null);
       targetElRef.current = null;
+
+      // In auto mode, a short breath after each card leaves the screen.
+      if (mode === "auto" && idx > 0) await sleep(reduce ? 100 : STEP_GAP);
+      if (!alive()) return;
 
       if (step.route && window.location.pathname !== step.route) {
         nav(step.route);
@@ -472,7 +480,7 @@ export default function DemoTour() {
             key={step.id}
             initial={reduce ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.35 }}
             className="paper-card p-4"
             style={{ width: POPUP_W, maxWidth: "calc(100vw - 24px)" }}
           >

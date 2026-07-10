@@ -299,9 +299,12 @@ api.post("/round/:id/message", async (req, res) => {
       replyText = result.text;
       scriptedState = result.state;
       beatIndex = result.state.beat;
+      // A beat of "typing…" before the reply starts — an instant answer
+      // reads as robotic. (The live LLM path has real latency already.)
+      await sleep(1100 + Math.floor(Math.random() * 800));
       for (const word of replyText.split(/(?<=\s)/)) {
         send({ delta: word });
-        await sleep(18);
+        await sleep(24);
       }
     }
   } catch (err) {
