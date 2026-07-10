@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FoolProof — 2-Minute Opening Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ============ FoolProof case-file tokens (mirror tailwind.config.js) ============ */
+  :root {
+    --paper: #F1EAD8;
+    --paper-bright: #FAF6EA;
+    --ink: #1C1917;
+    --redink: #C1361B;
+    --amber: #B97E10;
+    --verified: #2E7D4F;
+    --redact: #111111;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    cursor: none; /* recording-clean: no OS cursor in frame */
+  }
+  .display { font-family: "Archivo Black", sans-serif; }
+  .mono { font-family: "IBM Plex Mono", monospace; }
+  .stamp-text { font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.18em; }
+  .card {
+    background: var(--paper-bright);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    box-shadow: 3px 3px 0 0 var(--ink);
+  }
+  .chip {
+    display: inline-block; font-family: "IBM Plex Mono", monospace; text-transform: uppercase;
+    letter-spacing: 0.14em; font-weight: 700; border: 2px solid var(--ink);
+    border-radius: 3px; padding: 6px 12px;
+  }
+  .red { color: var(--redink); } .green { color: var(--verified); }
+  .amber { color: var(--amber); } .dim { color: rgba(28,25,23,.55); }
+
+  /* ============ slides ============ */
+  .slide {
+    position: fixed; inset: 0; display: none;
+    flex-direction: column; align-items: center; justify-content: center;
+    padding: 6vh 7vw; text-align: center;
+  }
+  .slide.active { display: flex; }
+  .kicker { font-size: clamp(12px, 1.1vw, 16px); font-weight: 700; }
+  .huge { font-size: clamp(72px, 13vw, 200px); line-height: .95; }
+  .h1 { font-size: clamp(34px, 4.6vw, 72px); line-height: 1.04; }
+  .h2 { font-size: clamp(24px, 3vw, 44px); line-height: 1.1; }
+  .body { font-size: clamp(15px, 1.4vw, 22px); line-height: 1.45; }
+  .small { font-size: clamp(11px, .95vw, 14px); }
+  .row { display: flex; gap: 22px; align-items: stretch; justify-content: center; flex-wrap: wrap; }
+  .stamp {
+    display: inline-block; border: 3px solid currentColor; border-radius: 4px;
+    padding: 6px 16px; font-family: "IBM Plex Mono", monospace; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .18em;
+  }
+
+  /* rehearsal helper (press H) — never leave on while recording */
+  #hint {
+    position: fixed; right: 14px; bottom: 14px; z-index: 50; display: none;
+    background: var(--paper-bright); border: 2px solid var(--ink); border-radius: 6px;
+    box-shadow: 3px 3px 0 0 var(--ink); padding: 12px 16px; text-align: left;
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; line-height: 1.8;
+  }
+  #hint.show { display: block; }
+  #hint b { color: var(--redink); }
+</style>
+</head>
+<body>
+
+<!-- ============ 1 · THE STAT · 0:00 ============ -->
+<section class="slide active" id="s1">
+  <p class="stamp-text kicker dim">FTC · 2025 CONSUMER FRAUD DATA</p>
+  <p class="display huge red" style="margin-top:2vh">$15.9B</p>
+  <p class="stamp-text kicker" style="margin-top:1.5vh">REPORTED FRAUD LOSSES — A RECORD</p>
+  <div class="card" style="margin-top:5vh; padding:20px 34px">
+    <p class="display h2 red">$3.5B</p>
+    <p class="stamp-text small dim" style="margin-top:6px">FROM IMPOSTER SCAMS ALONE</p>
+  </div>
+  <p class="mono small dim" style="position:fixed; bottom:4vh">source: ftc.gov — 2025 consumer fraud reports</p>
+</section>
+
+<!-- ============ 2 · PASSIVE vs ACTIVE · 0:09 ============ -->
+<section class="slide" id="s2">
+  <div class="row" style="width:100%; max-width:1200px">
+    <div class="card" style="flex:1; min-width:320px; padding:34px; text-align:left; opacity:.75">
+      <span class="stamp dim" style="font-size:12px">HOW WE TEACH IT</span>
+      <p class="display h2" style="margin-top:22px; text-decoration:line-through; text-decoration-color:var(--redink); text-decoration-thickness:3px">Articles.</p>
+      <p class="display h2" style="text-decoration:line-through; text-decoration-color:var(--redink); text-decoration-thickness:3px">Videos.</p>
+      <p class="display h2" style="text-decoration:line-through; text-decoration-color:var(--redink); text-decoration-thickness:3px">Quizzes.</p>
+      <p class="stamp-text small dim" style="margin-top:22px">PASSIVE</p>
+    </div>
+    <div class="card" style="flex:1; min-width:320px; padding:34px; text-align:left; border-color:var(--redink); box-shadow:3px 3px 0 0 var(--redink)">
+      <span class="stamp red" style="font-size:12px">HOW IT'S TAKEN</span>
+      <p class="display h2" style="margin-top:22px">A convincing person.</p>
+      <p class="display h2">In the moment.</p>
+      <p class="display h2 red">Before you think.</p>
+      <p class="stamp-text small red" style="margin-top:22px">ACTIVE</p>
+    </div>
+  </div>
+  <p class="body" style="margin-top:5vh; max-width:700px">You don't build a reflex by reading about one.</p>
+</section>
+
+<!-- ============ 3 · TITLE + ADVERSARIES · 0:22 ============ -->
+<section class="slide" id="s3">
+  <p class="stamp-text kicker red">CONSUMER FRAUD TRAINING DIVISION</p>
+  <h1 class="display h1" style="margin-top:2vh">GET SCAMMED HERE,<br/>SO IT NEVER HAPPENS<br/>OUT THERE.</h1>
+  <div class="row" style="margin-top:5.5vh">
+    <div class="card" style="padding:18px 22px; min-width:180px">
+      <p class="stamp-text small red">WANTED</p>
+      <p style="font-size:38px; margin-top:6px">💼</p>
+      <p class="mono small" style="margin-top:8px; font-weight:600">the fake recruiter</p>
+    </div>
+    <div class="card" style="padding:18px 22px; min-width:180px">
+      <p class="stamp-text small red">WANTED</p>
+      <p style="font-size:38px; margin-top:6px">🤝</p>
+      <p class="mono small" style="margin-top:8px; font-weight:600">the payday lender</p>
+    </div>
+    <div class="card" style="padding:18px 22px; min-width:180px">
+      <p class="stamp-text small red">WANTED</p>
+      <p style="font-size:38px; margin-top:6px">📞</p>
+      <p class="mono small" style="margin-top:8px; font-weight:600">the fraud-alert caller</p>
+    </div>
+    <div class="card" style="padding:18px 22px; min-width:180px">
+      <p class="stamp-text small red">WANTED</p>
+      <p style="font-size:38px; margin-top:6px">🏠</p>
+      <p class="mono small" style="margin-top:8px; font-weight:600">the poisoned lease</p>
+    </div>
+  </div>
+  <p class="stamp-text small dim" style="margin-top:4.5vh">AI ADVERSARIES THAT TRY TO ROB YOU — SAFELY</p>
+</section>
+
+<!-- ============ 4 · THREE ENGINES · 0:40 ============ -->
+<section class="slide" id="s4">
+  <p class="stamp-text kicker dim">THE ARCHITECTURE</p>
+  <h2 class="display h1" style="margin-top:1.5vh">THREE SEPARATE ENGINES.</h2>
+  <div class="row" style="margin-top:5vh; width:100%; max-width:1280px">
+    <div class="card" style="flex:1; min-width:280px; padding:26px; text-align:left">
+      <span class="stamp red" style="font-size:11px">1 · ADVERSARY</span>
+      <p class="body" style="margin-top:16px; font-weight:600">An AI character on a JSON playbook</p>
+      <p class="mono small dim" style="margin-top:10px; line-height:1.7">tactics · escalation rules<br/>· required concessions —<br/>data, not code</p>
+    </div>
+    <div class="card" style="flex:1; min-width:280px; padding:26px; text-align:left">
+      <span class="stamp amber" style="font-size:11px">2 · REFEREE</span>
+      <p class="body" style="margin-top:16px; font-weight:600">An independent AI grader</p>
+      <p class="mono small dim" style="margin-top:10px; line-height:1.7">grades the transcript against<br/>the tactic taxonomy —<br/>caught · resisted · fell for it</p>
+    </div>
+    <div class="card" style="flex:1; min-width:280px; padding:26px; text-align:left">
+      <span class="stamp green" style="font-size:11px">3 · DAMAGE</span>
+      <p class="body" style="margin-top:16px; font-weight:600">Deterministic TypeScript</p>
+      <p class="mono small dim" style="margin-top:10px; line-height:1.7">every dollar from pure<br/>functions — zero AI,<br/>covered by unit tests</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:5vh; padding:16px 34px; border-color:var(--redink); box-shadow:3px 3px 0 0 var(--redink)">
+    <p class="display h2 red">THE SCAMMER NEVER GRADES ITS OWN EXAM.</p>
+  </div>
+</section>
+
+<!-- ============ 5 · ENGINEERED MONEY · 1:00 ============ -->
+<section class="slide" id="s5">
+  <p class="stamp-text kicker dim">THE DAMAGE ENGINE</p>
+  <h2 class="display h1" style="margin-top:1.5vh">THE MONEY IS ENGINEERED,<br/>NEVER GENERATED.</h2>
+  <div class="row" style="margin-top:5vh; width:100%; max-width:1240px">
+    <div class="card" style="flex:1; min-width:240px; padding:22px">
+      <p class="display h2 red">391.1%</p>
+      <p class="mono small dim" style="margin-top:8px">the APR hidden inside<br/>"$15 per $100"</p>
+    </div>
+    <div class="card" style="flex:1; min-width:240px; padding:22px">
+      <p class="display h2 red">-$2,165</p>
+      <p class="mono small dim" style="margin-top:8px">the fake-check job,<br/>priced to the dollar</p>
+    </div>
+    <div class="card" style="flex:1; min-width:240px; padding:22px">
+      <p class="display h2 red">$2,850</p>
+      <p class="mono small dim" style="margin-top:8px">three lease clauses,<br/>buried in boilerplate</p>
+    </div>
+    <div class="card" style="flex:1; min-width:240px; padding:22px">
+      <p class="display h2 red">$4,800</p>
+      <p class="mono small dim" style="margin-top:8px">one fraud call's<br/>checking-account exposure</p>
+    </div>
+  </div>
+  <div class="row" style="margin-top:5vh">
+    <span class="chip green" style="border-color:var(--verified)">✓ 27 UNIT TESTS</span>
+    <span class="chip green" style="border-color:var(--verified)">✓ WOLFRAM|ALPHA CROSS-CHECK</span>
+    <span class="chip green" style="border-color:var(--verified)">✓ RUNS FULLY OFFLINE</span>
+  </div>
+</section>
+
+<!-- ============ 6 · THE REFLEX · 1:12 ============ -->
+<section class="slide" id="s6">
+  <p class="stamp-text kicker dim">THE POINT</p>
+  <h2 class="display h1" style="margin-top:1.5vh">TRAIN THE MOMENT<br/>OF RECOGNITION.</h2>
+  <div class="row" style="margin-top:5vh; max-width:1100px">
+    <span class="chip amber" style="border-color:var(--amber)">⚑ URGENCY PRESSURE</span>
+    <span class="chip amber" style="border-color:var(--amber)">⚑ FALSE SCARCITY</span>
+    <span class="chip amber" style="border-color:var(--amber)">⚑ AUTHORITY IMPERSONATION</span>
+    <span class="chip amber" style="border-color:var(--amber)">⚑ FEE BURIAL</span>
+    <span class="chip amber" style="border-color:var(--amber)">⚑ RATE ANCHORING</span>
+    <span class="chip amber" style="border-color:var(--amber)">⚑ ISOLATION</span>
+    <span class="chip amber" style="border-color:var(--amber)">⚑ REASSURANCE FRAMING</span>
+    <span class="chip amber" style="border-color:var(--amber)">⚑ SUNK-COST PRESSURE</span>
+    <span class="chip amber" style="border-color:var(--amber)">⚑ RECIPROCITY BAIT</span>
+    <span class="chip amber" style="border-color:var(--amber)">⚑ COMPLEXITY FLOODING</span>
+  </div>
+  <p class="body" style="margin-top:5vh; max-width:720px">Practice noticing the move — <b>before real money is on the line.</b></p>
+</section>
+
+<!-- ============ 7 · BUSINESS · 1:20 ============ -->
+<section class="slide" id="s7">
+  <p class="stamp-text kicker dim">THE BUSINESS</p>
+  <h2 class="display h1" style="margin-top:1.5vh">KNOWBE4 FOR<br/>CONSUMER FRAUD.</h2>
+  <div class="row" style="margin-top:5vh; width:100%; max-width:1280px">
+    <div class="card" style="flex:1; min-width:300px; padding:26px; text-align:left">
+      <span class="stamp red" style="font-size:11px">BANKS &amp; CREDIT UNIONS</span>
+      <p class="body" style="margin-top:14px; font-weight:600">Measurable loss prevention</p>
+      <p class="mono small dim" style="margin-top:8px; line-height:1.7">white-label scenarios in their own<br/>brand — that's who scammers impersonate</p>
+    </div>
+    <div class="card" style="flex:1; min-width:300px; padding:26px; text-align:left">
+      <span class="stamp red" style="font-size:11px">SCHOOLS</span>
+      <p class="body" style="margin-top:14px; font-weight:600">Personal-finance classes</p>
+      <p class="mono small dim" style="margin-top:8px; line-height:1.7">every round becomes<br/>gradeable coursework</p>
+    </div>
+    <div class="card" style="flex:1; min-width:300px; padding:26px; text-align:left">
+      <span class="stamp red" style="font-size:11px">CONSUMERS</span>
+      <p class="body" style="margin-top:14px; font-weight:600">Free, then subscribe</p>
+      <p class="mono small dim" style="margin-top:8px; line-height:1.7">new scam scenarios<br/>as real threats evolve</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 · SCALE · 1:40 ============ -->
+<section class="slide" id="s8">
+  <p class="stamp-text kicker dim">WHY IT SCALES</p>
+  <h2 class="display h1" style="margin-top:1.5vh">NEW SCAMS ARE CONTENT,<br/>NOT CODE.</h2>
+  <div class="row" style="margin-top:5vh; align-items:center">
+    <div class="card" style="padding:20px 26px; text-align:left">
+      <p class="mono small" style="font-weight:600">playbook.json</p>
+      <p class="mono small dim" style="margin-top:4px">+ one damage function</p>
+    </div>
+    <p class="display h2 dim">→</p>
+    <div class="card" style="padding:20px 26px; text-align:left; border-color:var(--verified); box-shadow:3px 3px 0 0 var(--verified)">
+      <p class="mono small green" style="font-weight:600">referee · tactic system · UI</p>
+      <p class="mono small dim" style="margin-top:4px">shared — nothing else changes</p>
+    </div>
+  </div>
+  <p class="body" style="margin-top:5.5vh; max-width:820px">FoolProof turns fraud from something people learn about <i>after losing money</i> into a reflex they practice <b>before it matters.</b></p>
+</section>
+
+<!-- ============ 9 · CLOSE / QR · 1:52 ============ -->
+<section class="slide" id="s9">
+  <p class="display h1">🗂️ FOOLPROOF</p>
+  <p class="stamp-text kicker dim" style="margin-top:1vh">GET SCAMMED HERE — SO IT NEVER HAPPENS OUT THERE</p>
+  <div class="card" style="margin-top:5vh; padding:26px; display:flex; gap:30px; align-items:center">
+    <img src="qr.png" alt="" style="width:180px; height:180px; border:2px solid var(--ink); border-radius:4px"
+         onerror="this.outerHTML='&lt;div style=&quot;width:180px;height:180px;border:2px dashed var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center&quot;&gt;&lt;span class=&quot;mono small dim&quot;&gt;drop qr.png&lt;br/&gt;next to deck.html&lt;/span&gt;&lt;/div&gt;'" />
+    <div style="text-align:left">
+      <p class="display h2">SCAN THE CODE.</p>
+      <p class="display h2 red">SEE HOW LONG YOU LAST.</p>
+      <p class="mono body" style="margin-top:14px">foolproof.onrender.com</p>
+    </div>
+  </div>
+  <p class="stamp-text small dim" style="position:fixed; bottom:4vh">UP NEXT ▸ LIVE DEMO</p>
+</section>
+
+<!-- rehearsal helper: press H to toggle (turn OFF before recording) -->
+<div id="hint">
+  <b>REHEARSAL TIMESTAMPS</b> (H hides · ←/→ or Space)<br/>
+  1 · 0:00 the stat<br/>
+  2 · 0:09 passive vs active<br/>
+  3 · 0:22 title + adversaries<br/>
+  4 · 0:40 three engines<br/>
+  5 · 1:00 engineered money<br/>
+  6 · 1:12 the reflex<br/>
+  7 · 1:20 business<br/>
+  8 · 1:40 scale<br/>
+  9 · 1:52 close / QR
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll(".slide")];
+  let i = 0;
+  const show = (n) => {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+  };
+  addEventListener("keydown", (e) => {
+    if (["ArrowRight", " ", "PageDown"].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key >= "1" && e.key <= "9") show(Number(e.key) - 1);
+    else if (e.key.toLowerCase() === "h") document.getElementById("hint").classList.toggle("show");
+  });
+</script>
+</body>
+</html>
