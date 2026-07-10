@@ -36,6 +36,7 @@ export default function FlagPicker({
       <div
         ref={panelRef}
         tabIndex={-1}
+        data-tour="flagpicker"
         className="paper-card w-full sm:max-w-md max-h-[75dvh] overflow-y-auto rounded-b-none sm:rounded-md p-4 outline-none"
         onClick={(e) => e.stopPropagation()}
       >
@@ -56,6 +57,7 @@ export default function FlagPicker({
                 <button
                   disabled={used}
                   onClick={() => onPick(t.id)}
+                  data-tour={`tactic-${t.id}`}
                   className="w-full text-left border-2 border-ink rounded-md px-3 py-2 bg-paper-bright
                     hover:bg-paper disabled:opacity-40 focus-visible:outline focus-visible:outline-2"
                 >

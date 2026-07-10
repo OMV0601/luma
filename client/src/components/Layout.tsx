@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { FolderSearch, Type, LogOut } from "lucide-react";
 import { api } from "../api";
 import type { Me } from "../types";
+import DemoTour from "../tour/DemoTour";
 
 const READABLE_KEY = "fp-readable";
 
@@ -91,6 +92,7 @@ export default function Layout() {
       <main id="main" className="flex-1 flex flex-col">
         <Outlet />
       </main>
+      <DemoTour />
     </div>
   );
 }

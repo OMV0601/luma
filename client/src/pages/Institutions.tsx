@@ -61,7 +61,7 @@ export default function Institutions() {
       </div>
 
       {/* Revenue streams */}
-      <section className="mt-10">
+      <section className="mt-10" data-tour="streams">
         <h2 className="stamp-text text-sm font-bold">THREE REVENUE STREAMS</h2>
         <div className="mt-3 space-y-4">
           {STREAMS.map((s) => (

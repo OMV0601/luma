@@ -222,7 +222,7 @@ export default function Round() {
       {/* transcript */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto py-4 space-y-3 min-h-0">
         {/* scene intro */}
-        <div className="paper-card p-4">
+        <div className="paper-card p-4" data-tour="scene">
           <p className="stamp-text text-[10px] text-redink font-bold">THE SCENE</p>
           <p className="text-sm mt-1 leading-snug">{s.setup}</p>
           {!introSeen && (
@@ -237,7 +237,7 @@ export default function Round() {
 
         {messages.map((m) =>
           m.role === "adversary" ? (
-            <div key={m.id} className="max-w-[88%] sm:max-w-[80%]">
+            <div key={m.id} className="max-w-[88%] sm:max-w-[80%]" data-tour="adversary-msg">
               <div className="paper-card shadow-none border-l-4 border-l-redink p-3 relative group">
                 <p className="font-mono text-[10px] uppercase tracking-wider text-redink/80">
                   {s.adversaryName}
@@ -245,6 +245,7 @@ export default function Round() {
                 <p className="text-sm mt-1 whitespace-pre-wrap leading-snug">{m.content}</p>
                 <button
                   onClick={() => setPicker(m.id)}
+                  data-tour="flag-btn"
                   className="absolute -right-2.5 -top-2.5 h-9 w-9 rounded-full border-2 border-ink bg-paper-bright
                     flex items-center justify-center hover:bg-amber/20 active:bg-amber/30 focus-visible:outline focus-visible:outline-2"
                   aria-label="Flag this message with a tactic"
@@ -276,7 +277,7 @@ export default function Round() {
         )}
 
         {draft !== null && (
-          <div className="max-w-[88%] sm:max-w-[80%]">
+          <div className="max-w-[88%] sm:max-w-[80%]" data-tour="draft">
             <div className="paper-card shadow-none border-l-4 border-l-redink p-3">
               <p className="font-mono text-[10px] uppercase tracking-wider text-redink/80">
                 {s.adversaryName}
@@ -316,10 +317,11 @@ export default function Round() {
             placeholder={`Talk to ${s.adversaryName.split(" ")[0]}…`}
             disabled={deciding}
             autoFocus
+            data-tour="composer"
             className="flex-1 border-2 border-ink rounded-md bg-paper-bright px-3 py-2.5 text-sm min-w-0"
             aria-label="Your message"
           />
-          <button className="btn-ink px-4" disabled={busy || deciding || !input.trim()}>
+          <button className="btn-ink px-4" disabled={busy || deciding || !input.trim()} data-tour="send">
             Send
           </button>
         </form>
@@ -333,6 +335,7 @@ export default function Round() {
               key={d.id}
               onClick={() => decide(d.id)}
               disabled={busy || deciding}
+              data-tour={`decision-${d.id}`}
               className={
                 d.kind === "walk" ? "btn-green px-3 py-1.5 text-[11px]" : d.kind === "take" ? "btn-red px-3 py-1.5 text-[11px]" : "btn px-3 py-1.5 text-[11px]"
               }

@@ -60,7 +60,7 @@ export default function Debrief() {
   return (
     <div className="mx-auto max-w-3xl w-full px-4 py-8">
       {/* ---- Case header + damage figure ---- */}
-      <div className="paper-card p-5 sm:p-7 relative overflow-hidden">
+      <div className="paper-card p-5 sm:p-7 relative overflow-hidden" data-tour="damage">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="stamp-text text-[10px] text-ink/50 font-semibold">
@@ -100,7 +100,7 @@ export default function Debrief() {
       </div>
 
       {/* ---- Itemized cost table (with redaction reveals) ---- */}
-      <section className="mt-8">
+      <section className="mt-8" data-tour="breakdown">
         <h2 className="stamp-text text-sm font-bold">THE ITEMIZED DAMAGE</h2>
         <div className="paper-card mt-3 divide-y-2 divide-ink/15">
           {result.breakdown.map((row, i) => (
@@ -125,7 +125,10 @@ export default function Debrief() {
           Figures computed by the deterministic damage engine — not by the AI.
         </p>
         {data.verification?.verified && (
-          <div className="mt-2 border-2 border-verified rounded-md px-3 py-2 bg-paper-bright flex items-start gap-2">
+          <div
+            className="mt-2 border-2 border-verified rounded-md px-3 py-2 bg-paper-bright flex items-start gap-2"
+            data-tour="verified"
+          >
             <span className="text-verified font-bold" aria-hidden>
               ✓
             </span>
@@ -143,7 +146,7 @@ export default function Debrief() {
       </section>
 
       {/* ---- Annotated transcript ---- */}
-      <section className="mt-8">
+      <section className="mt-8" data-tour="tape">
         <h2 className="stamp-text text-sm font-bold">THE TAPE — ANNOTATED</h2>
         <div className="paper-card mt-3 p-4 space-y-4">
           {transcript.map((m) => {

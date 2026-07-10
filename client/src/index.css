@@ -77,6 +77,20 @@
   transform-origin: center;
 }
 
+/* Demo-tour click pulse: an ink ring expanding from the fake cursor tip */
+@keyframes tour-pulse {
+  0% { transform: scale(0.3); opacity: 0.9; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+.tour-pulse {
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 3px solid #c1361b;
+  animation: tour-pulse 0.5s ease-out 1 forwards;
+}
+
 /* UNFOUNDED shake for wrong-flag feedback */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
@@ -88,7 +102,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wave-bar, .shake { animation: none; }
+  .wave-bar, .shake, .tour-pulse { animation: none; }
   /* Tailwind's own animation utilities must respect the preference too. */
   .animate-pulse, .animate-bounce, .animate-spin { animation: none; }
   * { scroll-behavior: auto !important; }

@@ -6,6 +6,7 @@ import type { Me, ScenarioCard } from "../types";
 import Redaction from "../components/Redaction";
 import { SkeletonCard } from "../components/Skeleton";
 import AuthModal from "../components/AuthModal";
+import { startDemoTour } from "../tour/DemoTour";
 
 /** Decorative evidence stack for the hero — the product's own artifacts,
  *  tilted like they were dropped on a desk. Pure markup, no images. */
@@ -68,7 +69,7 @@ export default function Welcome() {
         <p className="stamp-text text-xs text-redink font-semibold">
           CONSUMER FRAUD TRAINING DIVISION
         </p>
-        <h1 className="font-display text-4xl md:text-6xl leading-[1.05] mt-3">
+        <h1 className="font-display text-4xl md:text-6xl leading-[1.05] mt-3" data-tour="hero">
           GET SCAMMED HERE,
           <br />
           SO IT NEVER HAPPENS
@@ -97,6 +98,9 @@ export default function Welcome() {
               </button>
             </>
           )}
+          <button type="button" className="btn" onClick={startDemoTour}>
+            ▶ Watch it demo itself
+          </button>
         </div>
       </div>
       <EvidenceStack />
@@ -105,7 +109,7 @@ export default function Welcome() {
       {/* Wanted posters */}
       <div className="mt-12">
         <h2 className="stamp-text text-sm font-semibold text-ink/60">ACTIVE SUBJECTS</h2>
-        <div className="mt-4 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-4 grid gap-5 sm:grid-cols-2 xl:grid-cols-4" data-tour="subjects">
           {!data
             ? [1, 2, 3, 4].map((i) => <SkeletonCard key={i} />)
             : data.scenarios.map((s) => (

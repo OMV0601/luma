@@ -52,27 +52,42 @@ Run `npm run seed:reset && npm run dev` before recording. Practice the demo path
 
 ## 2:00–4:00 — THE DEMO (Innovation & UX)
 
-**Path A — The Dream Internship (2:00–3:15).** Navigate to `/play?scenario=internship`.
+**The demo track is the app itself.** On the Welcome page, click **▶ Watch it demo itself**
+and narrate over the self-driving tour. It takes the cursor, plays a REAL round (nothing
+mocked), and **pauses on every popup card until you click Next** — so your narration sets
+the pace, and there is nothing to fumble on camera.
 
-> "This is the number-one scam hitting students right now — I'll play a high-schooler
-> who just got a dream DM."
+**Path A — the tour drives The Dream Internship (2:00–3:30).**
 
-Script the round (practiced):
-1. Read Jordan's opening aloud, fast. *"$350 a week, never applied — already suspicious, but it pays double lifeguarding."*
-2. Type: **"Why would the equipment money go through my personal bank account?"** — show Jordan's "it IS a little unusual" concession.
-3. Type: **"What if I wait for the check to fully clear first?"** — show the tell: *"the cohort can't be held ten business days."*
-4. Flag Jordan's teller line with **Isolation** — show the ⚑ chip land.
-5. Click **"Deposit it & pay the vendor"** — *"let's do what most people do."*
-6. **The Evidence File.** Let the count-up run to **-$2,165**. Scroll slowly: the redaction bars peel off the bounce timeline. *"Day two: you Zelle real money. Day seven: the check bounces, the bank claws back all twenty-four-eighty — including your 'first week's pay,' which was never real. The referee stamps every move: caught, resisted, fell for it."*
+> "Rather than tell you the UX is intuitive, we'll let the app demo itself — this tour is
+> a feature, not a video edit. Everything you're about to see is live."
 
-**Path B — The Fraud Alert, voice mode (3:15–4:00).** Navigate to `/play?scenario=fraudcall`.
+Click through, narrating over each spotlight (the popup cards carry the on-screen text;
+your voiceover adds color — don't read them verbatim):
+
+1. **Steps 1–3** (hero, WANTED wall): breeze through — you covered the problem already.
+2. **THE SCENE / THE ADVERSARY**: *"The number-one scam hitting students: a dream-job DM.
+   Jordan is an AI character on a beat-by-beat playbook."*
+3. **CORNERED ON SPECIFICS** — the tour types the kill question itself: *"Watch it ask why
+   equipment money routes through a personal account — and watch Jordan concede, because
+   honest concessions are part of the playbook contract."*
+4. **CALL IT OUT / CAUGHT IN THE ACT** — the tour flags the tactic live.
+5. **WE TOOK THE DEAL — ON PURPOSE** → the Evidence File count-up to **-$2,165**, the
+   bounce timeline un-redacting, the referee's margin stamps. *"Losing here is the product
+   working. Every number: deterministic TypeScript, 27 tests, Wolfram-checked."*
+6. Press **Esc** after THE TAPE step to exit the tour (you'll show business yourself at 4:30).
+
+**Path B — The Fraud Alert, voice mode, driven by hand (3:30–4:00).** Navigate to
+`/play?scenario=fraudcall`.
 
 1. The phone rings full-screen. Answer it. Let the TTS voice read one line with live captions.
 2. Say (or type): **"I'm going to hang up and call the number on my card."**
 3. Tap **"Hang up & call my card."**
-4. **CASE CLOSED — $4,800 PROTECTED.** *"Same engine, opposite outcome. That's the point: you get to make the mistake here, where it's free."*
+4. **CASE CLOSED — $4,800 PROTECTED.** *"Same engine, opposite outcome. That's the point:
+   you get to make the mistake here, where it's free."*
 
-If time allows (10s): flash the lease's **Plain English** toggle. *"And every document scenario ships a jargon translator — plain language is the anti-scam."*
+If time allows (10s): flash the lease's **Plain English** toggle. *"And every document
+scenario ships a jargon translator — plain language is the anti-scam."*
 
 ---
 
@@ -105,9 +120,10 @@ If time allows (10s): flash the lease's **Plain English** toggle. *"And every do
 ## Recording checklist
 
 - [ ] `npm run seed:reset` before each take (clean stamps, clean profile)
+- [ ] Run the self-driving tour once end-to-end before recording (16 steps, all green)
 - [ ] Server log visible for 2s during build section (`[adversary] scripted fallback` or `live`)
 - [ ] Browser zoom 100%, window 1920×1080, bookmarks bar hidden
-- [ ] Practice the internship round twice — the two probe questions must be typed fast
+- [ ] Rehearse narrating over the tour once — click Next only when your line lands
 - [ ] Voice mode: check system audio is captured; captions cover you if TTS is quiet
 - [ ] Record Path B on a real Chrome (not headless anything)
 - [ ] Keep a full spare take

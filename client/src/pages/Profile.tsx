@@ -63,7 +63,7 @@ export default function Profile() {
       </div>
 
       {/* Radar */}
-      <section className="mt-8">
+      <section className="mt-8" data-tour="radar">
         <h2 className="stamp-text text-sm font-bold">TACTIC CATCH-RATE</h2>
         <div className="paper-card mt-3 p-2 sm:p-4">
           {data.roundsPlayed === 0 ? (
