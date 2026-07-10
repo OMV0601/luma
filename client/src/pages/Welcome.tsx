@@ -136,7 +136,11 @@ export default function Welcome() {
 
       <p className="mt-10 font-mono text-xs text-ink/50">
         Running a credit union, bank, or classroom?{" "}
-        <Link to="/for-institutions" className="underline underline-offset-4 hover:text-ink">
+        <Link
+          to="/for-institutions"
+          className="underline underline-offset-4 hover:text-ink"
+          data-tour="link-institutions"
+        >
           FoolProof for institutions →
         </Link>
         <span className="mx-2 text-ink/30" aria-hidden>·</span>

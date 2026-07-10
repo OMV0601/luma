@@ -18,6 +18,9 @@ export interface TourAction {
   selector?: string;
   text?: string;
   ms?: number;
+  /** skip this action (don't fail the step) if the selector never appears —
+   *  for chains that differ by mode, e.g. "close the lease modal if open" */
+  optional?: boolean;
 }
 
 export interface TourStep {
@@ -76,8 +79,12 @@ export const TOUR_STEPS: TourStep[] = [
   },
   {
     id: "scene",
-    route: "/round/internship",
-    waitFor: '[data-tour="composer"]',
+    // walk there like a person: header nav -> the Gauntlet -> open the case
+    actions: [
+      { type: "click", selector: '[data-tour="nav-gauntlet"]' },
+      { type: "sleep", ms: 700 },
+      { type: "click", selector: '[data-tour="open-internship"]' },
+    ],
     target: '[data-tour="scene"]',
     title: "THE SCENE",
     body: "You're a student. You never applied to this. It pays double your friend's lifeguard job. Every scenario opens with the moment before the mistake.",
@@ -151,16 +158,14 @@ export const TOUR_STEPS: TourStep[] = [
   {
     id: "codex",
     autoOnly: true,
-    route: "/codex",
-    waitFor: '[data-tour="codex"]',
+    actions: [{ type: "click", selector: '[data-tour="nav-codex"]' }],
     target: '[data-tour="codex"]',
     title: "THE TACTIC CODEX",
     body: "Every con is one of ten named moves. Entries unlock the moment a scammer runs one on you — we teach at the point of failure, never as a lesson module. Each opens with a real-world example and the counter-move that defuses it.",
   },
   {
     id: "radar",
-    route: "/profile",
-    waitFor: '[data-tour="radar"]',
+    actions: [{ type: "click", selector: '[data-tour="nav-profile"]' }],
     target: '[data-tour="radar"]',
     title: "STREET SMARTS",
     body: "The round you just watched is already on this profile: money protected vs lost, and a catch-rate radar across all ten tactics. Weak spots are visible, so the next round targets them. That's the retention loop.",
@@ -178,8 +183,13 @@ export const TOUR_STEPS: TourStep[] = [
     id: "voice-call",
     autoOnly: true,
     optional: true,
-    route: "/round/fraudcall",
-    waitFor: '[data-tour="answer-call"]',
+    // back to the Gauntlet wall, then open the Fraud Alert case — the ring
+    // should be the consequence of a visible click, not an ambush
+    actions: [
+      { type: "click", selector: '[data-tour="nav-gauntlet"]' },
+      { type: "sleep", ms: 700 },
+      { type: "click", selector: '[data-tour="open-fraudcall"]' },
+    ],
     timeoutMs: 12000,
     target: '[data-tour="incoming-call"]',
     title: "IT ALSO RINGS",
@@ -208,9 +218,12 @@ export const TOUR_STEPS: TourStep[] = [
     id: "plain-english",
     autoOnly: true,
     optional: true,
-    route: "/round/lease",
-    waitFor: '[data-tour="composer"]',
+    // from the fraud-call debrief: Gauntlet -> the Lease Signing -> open the
+    // lease document -> flip it to Plain English, all on camera
     actions: [
+      { type: "click", selector: '[data-tour="nav-gauntlet"]' },
+      { type: "sleep", ms: 700 },
+      { type: "click", selector: '[data-tour="open-lease"]' },
       { type: "click", selector: '[data-tour="doc-btn"]' },
       { type: "sleep", ms: 500 },
       { type: "click", selector: '[data-tour="plain-toggle"]' },
@@ -222,8 +235,15 @@ export const TOUR_STEPS: TourStep[] = [
   },
   {
     id: "business",
-    route: "/for-institutions",
-    waitFor: '[data-tour="streams"]',
+    // close the lease doc + leave the round when arriving from the auto path
+    // (both clicks skip silently in guided mode), then home -> institutions
+    actions: [
+      { type: "click", selector: '[data-tour="doc-close"]', optional: true },
+      { type: "click", selector: '[data-tour="leave-round"]', optional: true },
+      { type: "click", selector: '[data-tour="nav-home"]' },
+      { type: "sleep", ms: 600 },
+      { type: "click", selector: '[data-tour="link-institutions"]' },
+    ],
     target: '[data-tour="streams"]',
     title: "THE BUSINESS",
     body: "KnowBe4 built a multi-billion-dollar category on simulated phishing for employees. FoolProof is simulated fraud for customers: per-member licensing for banks and credit unions, per-seat for schools, freemium for families.",

@@ -244,6 +244,9 @@ export default function DemoTour() {
   useEffect(() => {
     const onStart = (e: Event) => {
       const m = (e as CustomEvent<{ mode?: TourMode }>).detail?.mode ?? "auto";
+      // The Gauntlet auto-opens its first-visit walkthrough modal — it would
+      // sit on top of the demo the moment the cursor clicks into the page.
+      localStorage.setItem("fp-tutorial-seen", "1");
       posRef.current = { x: window.innerWidth / 2, y: window.innerHeight * 0.7 };
       applyCursor();
       setMode(m);
@@ -345,7 +348,14 @@ export default function DemoTour() {
             await sleep(a.ms ?? 400);
             break;
           case "click": {
-            if (!(await waitUntil(() => Boolean(resolveEl(a.selector!)), 9000))) return false;
+            const found = await waitUntil(
+              () => Boolean(resolveEl(a.selector!)),
+              a.optional ? 1600 : 9000
+            );
+            if (!found) {
+              if (a.optional) break; // state-dependent click — fine to skip
+              return false;
+            }
             const el = resolveEl(a.selector!)!;
             el.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
             await sleep(reduce ? 40 : 480);

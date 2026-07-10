@@ -41,18 +41,22 @@ export default function Layout() {
         <header className="border-b-2 border-ink bg-paper-bright safe-t">
           {/* Top row: logo + font toggle. Nav drops to its own row on phones. */}
           <div className="mx-auto max-w-5xl px-4 py-3 flex items-center gap-4 sm:gap-6 flex-wrap">
-            <Link to="/" className="flex items-center gap-2 font-display text-lg tracking-tight">
+            <Link
+              to="/"
+              className="flex items-center gap-2 font-display text-lg tracking-tight"
+              data-tour="nav-home"
+            >
               <FolderSearch className="h-5 w-5" aria-hidden />
               FOOLPROOF
             </Link>
             <nav className="order-3 w-full sm:order-none sm:w-auto flex items-center gap-4 sm:gap-4 font-mono text-[11px] sm:text-xs uppercase tracking-wider">
-              <Link to="/gauntlet" className="hover:underline underline-offset-4">
+              <Link to="/gauntlet" className="hover:underline underline-offset-4" data-tour="nav-gauntlet">
                 Gauntlet
               </Link>
-              <Link to="/profile" className="hover:underline underline-offset-4">
+              <Link to="/profile" className="hover:underline underline-offset-4" data-tour="nav-profile">
                 Street Smarts
               </Link>
-              <Link to="/codex" className="hover:underline underline-offset-4">
+              <Link to="/codex" className="hover:underline underline-offset-4" data-tour="nav-codex">
                 Codex
               </Link>
             </nav>

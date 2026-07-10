@@ -217,6 +217,7 @@ export default function Round() {
             className="btn px-2 py-1.5 text-xs"
             onClick={() => nav("/gauntlet")}
             aria-label="Leave round"
+            data-tour="leave-round"
           >
             <X className="h-3.5 w-3.5" />
           </button>

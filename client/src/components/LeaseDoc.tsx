@@ -108,7 +108,7 @@ export default function LeaseDoc({
             <button className="btn px-2 py-1 text-xs" onClick={() => setHint(!hint)}>
               {hint ? "Hide hint" : "Hint"}
             </button>
-            <button className="btn px-2 py-1 text-xs" onClick={onClose}>
+            <button className="btn px-2 py-1 text-xs" onClick={onClose} data-tour="doc-close">
               Close
             </button>
           </div>

@@ -83,7 +83,11 @@ export default function Gauntlet() {
                 </p>
                 <p className="text-sm text-ink/75 mt-2 leading-snug flex-1">{s.setup}</p>
                 <div className="mt-4 flex items-center gap-2">
-                  <Link to={`/round/${s.slug}`} className="btn-ink flex-1 text-center">
+                  <Link
+                    to={`/round/${s.slug}`}
+                    className="btn-ink flex-1 text-center"
+                    data-tour={`open-${s.slug}`}
+                  >
                     Open the case
                   </Link>
                   {s.supportsVoice && (
