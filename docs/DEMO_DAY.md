@@ -130,7 +130,9 @@ That converts our biggest liability into a live demonstration of our core techni
 >
 > **Two — the referee.** A *separate* model call grades the transcript against our ten-tactic taxonomy. **The scammer never grades its own exam.**
 >
-> **Three — the damage engine.** Every dollar you just saw is deterministic TypeScript. Pure functions, twenty-seven unit tests, zero AI. The payday APR is the real CFPB formula; the fake-check timeline is Regulation CC. We also re-run the key computation through Wolfram Alpha and badge it — two independent systems, one number, or the badge refuses to render.
+> **Three — the damage engine.** Every dollar you just saw is deterministic TypeScript. Pure functions, twenty-seven unit tests, zero AI. The payday APR is the real CFPB formula; the fake-check timeline is Regulation CC. And the key computation is cross-checked against Wolfram Alpha — two independent systems, or the number doesn't ship.
+
+*(⚠️ Say this as a property of the system, don't point at the screen: the Wolfram badge only renders when `WOLFRAM_APP_ID` is set, and it is **not** set on the deployed site. Set it in Render, or keep this as a spoken claim about the architecture — which it truthfully is.)*
 >
 > And if you pull the API key entirely, scripted state machines run the same playbooks offline. The demo cannot break — which is why I was willing to let it drive itself in front of you."
 
@@ -156,7 +158,8 @@ Presenting remotely into an in-person room is a real disadvantage: you have no b
 
 ### The night before (tonight)
 - [ ] **P0 — the live URL is dead.** `foolproof.onrender.com` returns *"This service has been suspended by its owner."* If a judge clicks it, that is the last impression they have. **Either** un-suspend/redeploy it in the Render dashboard **or** remove the URL from the deck's closing slide. Do not leave it pointing at a suspended service.
-- [ ] Run `npm run seed:reset && npm run dev` and play the **full auto-demo once, start to finish.** It must be green.
+- [ ] Run `npm run seed:reset && npm run dev` and play your **full manual demo path once, start to finish.** It must be green.
+- [ ] **Create `server/.env`** (copy `server/.env.example`) and paste `ANTHROPIC_API_KEY`. Without it, localhost runs the *scripted* adversary — fully functional, but not the live Claude character that makes the demo sing. Optionally add `WOLFRAM_APP_ID` (free) to light up the cross-check badge.
 - [ ] Record a **backup screen capture of the full auto-demo** (3 min, with audio). If anything breaks live, you play the recording and narrate over it. This is your parachute — do not skip it.
 - [ ] Decide who speaks. **One presenter.** Remote + multiple speakers = talking over each other on lag. One voice, one screen.
 - [ ] Charge everything. Test the mic you'll actually use.
