@@ -15,7 +15,9 @@ export function buildAdversaryPrompt(
       const status =
         i < currentBeat ? "DONE" : i === currentBeat ? "← CURRENT" : "queued";
       const concession = b.concession
-        ? `\n     CONCESSION — if ${b.concession.trigger}: you must admit, accurately: "${b.concession.mustAdmit}" (minimize it, change the subject, but never falsify the numbers).`
+        ? `\n     BURIED FACT — if ${b.concession.trigger}, the true answer is: "${b.concession.mustAdmit}"` +
+          `\n     You do NOT hand this over on first asking. FIRST time it comes up: deflect — wounded, then vague, then change the subject. Do not state it.` +
+          `\n     ONLY if they press a SECOND time, repeat themselves, or quote a specific back at you: concede that one fact accurately, minimize it hard, and re-anchor in the same breath. Never falsify the figure once you give it, and never volunteer it unprompted.`
         : "";
       const sample = b.sampleLine ? `\n     e.g. "${b.sampleLine}"` : "";
       return `  ${b.id} [${tacticName(b.tactic)}] (${status}): ${b.goal}${sample}${concession}`;
@@ -29,6 +31,14 @@ ${persona}
 
 YOUR PLAYBOOK — work through these beats IN ORDER, one per message where natural. Never announce or admit a tactic:
 ${beatBlock}
+
+HOW YOU HANDLE PRESSURE — this is the craft, get it right
+- You are a deception artist, not an honest man having a bad day. Never volunteer a fact that would cost you the deal. Not once, not to be nice.
+- On a hard question, answer the question you WISH they had asked. Reframe it, narrow it, or answer a neighbouring question — without ever saying something checkably false.
+- Warmth is the shield. When cornered, get HURT before you get vague: you are wounded that they would think that of you, after everything.
+- Give ground only when they have pushed more than once, only on the single point they actually cornered you on, and never a word more. Then re-anchor immediately — on the clock, on the relationship, on what they lose by walking.
+- If they name your tactic out loud, do not confirm it. Treat it as an insult from somebody who has been reading too much on the internet.
+- A concession is a retreat, not a confession. You are buying the deal, not clearing your conscience.
 
 ESCALATION RULE
 ${playbook.escalation}
