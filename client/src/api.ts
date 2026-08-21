@@ -1,12 +1,47 @@
 /** Fetch wrapper + the SSE reader for streamed adversary replies. */
 import type { RoundStart, StreamDone } from "./types";
 
-async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+/** Endpoints that must never trigger the auto-guest recovery below. */
+const NO_AUTO_GUEST = ["/api/login", "/api/signup", "/api/guest", "/api/logout", "/api/me"];
+
+let guestInFlight: Promise<Response> | null = null;
+
+/**
+ * Issue a guest pass, coalescing concurrent callers into one POST. Several
+ * queries can 401 in the same tick (profile + codex + scenarios); without this
+ * they'd each mint a separate account and the last one would win.
+ */
+function ensureGuest(): Promise<Response> {
+  if (!guestInFlight) {
+    guestInFlight = fetch("/api/guest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+    })
+      .then((res) => {
+        // Let the app know identity changed under it — the header reads it.
+        window.dispatchEvent(new Event("fp:session-recovered"));
+        return res;
+      })
+      .finally(() => {
+        guestInFlight = null;
+      });
+  }
+  return guestInFlight;
+}
+
+async function request<T>(path: string, options: RequestInit = {}, retry = true): Promise<T> {
   const res = await fetch(path, {
     headers: { "Content-Type": "application/json" },
     credentials: "same-origin",
     ...options,
   });
+  // No session — first visit, or the server restarted and wiped it mid-demo.
+  // Guests get the whole product, so recover silently instead of erroring out.
+  if (res.status === 401 && retry && !NO_AUTO_GUEST.includes(path)) {
+    await ensureGuest();
+    return request<T>(path, options, false);
+  }
   const body = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(body.error || `Request failed (${res.status})`);
   return body as T;
@@ -56,12 +91,19 @@ export async function streamMessage(
   content: string,
   onDelta: (text: string) => void
 ): Promise<StreamDone> {
-  const res = await fetch(`/api/round/${sessionId}/message`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "same-origin",
-    body: JSON.stringify({ content }),
-  });
+  const post = () =>
+    fetch(`/api/round/${sessionId}/message`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ content }),
+    });
+  let res = await post();
+  // Same recovery as request(): a dropped session shouldn't kill a live round.
+  if (res.status === 401) {
+    await ensureGuest();
+    res = await post();
+  }
   if (!res.ok || !res.body) {
     const body = await res.json().catch(() => ({}));
     throw new Error((body as { error?: string }).error || `Stream failed (${res.status})`);

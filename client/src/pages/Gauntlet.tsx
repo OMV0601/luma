@@ -1,5 +1,5 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { Link, useSearchParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Phone, HelpCircle } from "lucide-react";
 import { api, usd } from "../api";
 import type { Me, ScenarioCard } from "../types";
@@ -11,8 +11,8 @@ import { useEffect, useState } from "react";
 const TUTORIAL_KEY = "fp-tutorial-seen";
 
 export default function Gauntlet() {
-  const nav = useNavigate();
   const [params, setParams] = useSearchParams();
+  const qc = useQueryClient();
   const { data: me, isLoading: meLoading } = useQuery({
     queryKey: ["me"],
     queryFn: () => api.me<Me>(),
@@ -35,10 +35,20 @@ export default function Gauntlet() {
     }
   }
 
-  // Not logged in -> back to the front door.
+  // No session? Issue a guest pass and stay put. Guests get the full product
+  // — every scenario, the referee, the Evidence File — so there is nothing to
+  // bounce them to. This also self-heals if the server restarts mid-demo.
   useEffect(() => {
-    if (!meLoading && me && !me.user) nav("/");
-  }, [me, meLoading, nav]);
+    if (meLoading || !me || me.user) return;
+    let cancelled = false;
+    (async () => {
+      await api.guest();
+      if (!cancelled) await qc.invalidateQueries({ queryKey: ["me"] });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [me, meLoading, qc]);
 
   return (
     <div className="mx-auto max-w-5xl w-full px-4 py-8">

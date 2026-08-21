@@ -22,6 +22,14 @@ export default function Layout() {
     nav("/");
   }
 
+  // A dropped session is recovered inside the fetch wrapper; refresh the
+  // header identity when that happens so it never shows a stale agent.
+  useEffect(() => {
+    const onRecovered = () => qc.invalidateQueries({ queryKey: ["me"] });
+    window.addEventListener("fp:session-recovered", onRecovered);
+    return () => window.removeEventListener("fp:session-recovered", onRecovered);
+  }, [qc]);
+
   // Readable mode: Atkinson Hyperlegible for running text, persisted.
   const [readable, setReadable] = useState(() => localStorage.getItem(READABLE_KEY) === "1");
   useEffect(() => {

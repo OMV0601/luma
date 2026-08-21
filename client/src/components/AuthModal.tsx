@@ -160,7 +160,7 @@ export default function AuthModal({
             onClick={guest}
             disabled={busy !== null}
           >
-            {busy === "guest" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Skip — try one round as a guest"}
+            {busy === "guest" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Skip — continue as a guest"}
           </button>
           <p className="mt-2 flex items-center gap-1.5 font-mono text-[10px] text-ink/40">
             <ShieldCheck className="h-3 w-3" aria-hidden /> Passwords are hashed. No email, no real money, ever.

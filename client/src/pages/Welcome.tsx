@@ -53,6 +53,21 @@ export default function Welcome() {
     queryFn: () => api.scenarios<{ scenarios: ScenarioCard[] }>(),
   });
   const [authMode, setAuthMode] = useState<null | "signup" | "login">(null);
+  const [guestBusy, setGuestBusy] = useState(false);
+
+  /** Straight in on a guest pass — full scenarios, full Evidence File. An
+   *  account only exists to keep your record between visits. */
+  async function startAsGuest() {
+    if (guestBusy) return;
+    setGuestBusy(true);
+    try {
+      await api.guest();
+      await qc.invalidateQueries({ queryKey: ["me"] });
+      nav("/gauntlet");
+    } finally {
+      setGuestBusy(false);
+    }
+  }
 
   async function finishAuth(isNew: boolean) {
     await qc.invalidateQueries({ queryKey: ["me"] });
@@ -90,8 +105,11 @@ export default function Welcome() {
             </button>
           ) : (
             <>
-              <button className="btn-ink" onClick={() => setAuthMode("signup")}>
-                Create account &amp; start
+              <button className="btn-ink" onClick={startAsGuest} disabled={guestBusy}>
+                {guestBusy ? "Opening a case file…" : "Enter the Gauntlet"}
+              </button>
+              <button className="btn" onClick={() => setAuthMode("signup")}>
+                Create an account
               </button>
               <button className="btn" onClick={() => setAuthMode("login")}>
                 Log in
@@ -106,7 +124,8 @@ export default function Welcome() {
           </button>
         </div>
         <p className="mt-2 font-mono text-[11px] text-ink/50">
-          Auto-demo: sit back, it runs itself (~3 min). Guided tour: click through at your pace.
+          No account needed — guests get every scenario and the full Evidence File. Auto-demo: sit
+          back, it runs itself (~3 min). Guided tour: click through at your pace.
         </p>
       </div>
       <EvidenceStack />
