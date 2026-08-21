@@ -61,7 +61,7 @@ I researched all 12 rival finalists. These gaps are real and exploitable:
 
 **Do not hide it. Do not lead with it. Have this answer loaded and deliver it without flinching:**
 
-> "Straight answer: the core platform was built in July for an earlier hackathon. What I built for Open Atlas is The Notario — because when I looked at our five scenarios against *this* community, not one of them spoke to it. I generated it through our own Scam Factory pipeline in an afternoon. That's not me patching a gap; that's the architecture's whole thesis working in front of you: **new scams are content, not code.**"
+> "Straight answer: the core platform was built in July for an earlier hackathon. What I built for Open Atlas is The Notario — because when I held our five scenarios up against *this* community, not one of them spoke to it. I authored it to our Scam Factory's own schema, ran it through the same validator, and it dropped straight in — **zero engine changes, zero new code.** That's not me patching a gap; that's the architecture's whole thesis working in front of you: **new scams are content, not code.**"
 
 That converts our biggest liability into a live demonstration of our core technical claim. It is also simply true. If you get asked and you dodge, we lose the room — this bench respects candor and will smell a dodge instantly.
 

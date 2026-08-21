@@ -10,7 +10,9 @@
 
 ### 1. "Was this built during the hackathon?" ⚠️ *most likely question, most dangerous*
 
-> "Straight answer: the core platform was built in July, for an earlier hackathon. What I built for Open Atlas is The Notario — because when I held our five scenarios up against *this* community, not one of them spoke to it. I generated it through our own Scam Factory pipeline in an afternoon, and it's the scenario you just watched. That's not me patching a gap — it's the architecture's thesis working in front of you: new scams are content, not code."
+> "Straight answer: the core platform was built in July, for an earlier hackathon. What I built for Open Atlas is The Notario — because when I held our five scenarios up against *this* community, not one of them spoke to it. I authored it to our Scam Factory's schema, validated it with the same validator, and it loaded with **zero engine changes**. That's not me patching a gap — it's the architecture's thesis working in front of you: new scams are content, not code."
+
+**If pressed — "did you actually run the generator?"** Answer plainly: *"Not for this one. The Toll Text was CLI-generated; I hand-wrote the Notario to the same schema because I wanted the legal details exact. Same validator, same damage engine, same zero code changes."* Precision here costs nothing and buys everything.
 
 **Do not dodge this.** Several other finalists have the same exposure and will get caught being cagey. Answering it in one breath, with a concrete in-window artifact to point at, is the strongest possible position.
 
