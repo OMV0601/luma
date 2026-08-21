@@ -119,8 +119,8 @@
   <span class="stamp red stamp-in" style="margin-top:6vh; font-size:clamp(14px,1.4vw,20px); border-width:3px">
     TRAINING SIMULATION — LIVE AI ADVERSARIES
   </span>
-  <p class="mono small dim" style="position:fixed; bottom:4vh; left:5vw">LUMA HACKATHON · JULY 2026</p>
-  <p class="mono small dim" style="position:fixed; bottom:4vh; right:5vw">foolproof.onrender.com</p>
+  <p class="mono small dim" style="position:fixed; bottom:4vh; left:5vw">OPEN ATLAS · AI FOR SOCIAL GOOD · AUG 2026</p>
+  <p class="mono small dim demo-url" style="position:fixed; bottom:4vh; right:5vw"></p>
 </section>
 
 <!-- ============ 1 · THE STAT · 0:00 ============ -->
@@ -180,6 +180,11 @@
       <p class="stamp-text small red">WANTED</p>
       <p style="font-size:38px; margin-top:6px">🏠</p>
       <p class="mono small" style="margin-top:8px; font-weight:600">the poisoned lease</p>
+    </div>
+    <div class="card" style="padding:18px 22px; min-width:180px; border-color:var(--redink); box-shadow:3px 3px 0 0 var(--redink)">
+      <p class="stamp-text small red">WANTED</p>
+      <p style="font-size:38px; margin-top:6px">🖋️</p>
+      <p class="mono small" style="margin-top:8px; font-weight:600">the notario</p>
     </div>
   </div>
   <p class="stamp-text small dim" style="margin-top:4.5vh">AI ADVERSARIES THAT TRY TO ROB YOU — SAFELY</p>
@@ -316,7 +321,7 @@
   <span class="stamp red stamp-in" style="margin-top:6vh; font-size:clamp(13px,1.2vw,18px); border-width:3px">
     ● LIVE DEMO
   </span>
-  <p class="mono small dim" style="position:fixed; bottom:4vh">foolproof.onrender.com</p>
+  <p class="mono small dim demo-url" style="position:fixed; bottom:4vh"></p>
 </section>
 
 <!-- rehearsal helper: press H to toggle (turn OFF before recording) -->
@@ -335,6 +340,18 @@
 </div>
 
 <script>
+  /* ────────────────────────────────────────────────────────────────
+     SET THIS ONCE before presenting.
+     Leave as "" to hide the URL entirely (safest if the deploy is down —
+     never point judges at a suspended service).
+     ──────────────────────────────────────────────────────────────── */
+  const DEMO_URL = "";
+
+  document.querySelectorAll(".demo-url").forEach((el) => {
+    el.textContent = DEMO_URL;
+    el.style.display = DEMO_URL ? "" : "none";
+  });
+
   const slides = [...document.querySelectorAll(".slide")];
   let i = 0;
   const show = (n) => {
