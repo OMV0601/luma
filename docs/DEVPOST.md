@@ -1,6 +1,6 @@
 # FoolProof — get scammed here, so it never happens out there
 
-> ⚠️ **SUPERSEDED — do not use for Open Atlas Demo Day.** This is the older LUMA-hackathon video script. For Fri Aug 21 use **pitch/FoolProof-Demo-Day-Script.docx** (the two-person run of show) and **docs/DEMO_DAY.md**.
+> ℹ️ **Reference only — this is the written Devpost submission story, not a pitch script.** For Fri Aug 21 use **pitch/FoolProof-Demo-Day-Script.docx** (the two-person run of show). Note it predates The Notario, so it still says five scenarios and 27 tests.
 
 ## Inspiration
 
