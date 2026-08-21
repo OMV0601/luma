@@ -1,6 +1,6 @@
 # THE FIELD — 12 rival finalists, scouted
 
-Researched from Devpost pages, live demos, and public repos. Read once tonight; skim the top table before you go on.
+Researched from Devpost pages, live demos, embedded videos, and public repos. Read once tonight; skim the top table before you go on.
 
 ## The field at a glance
 
@@ -17,13 +17,13 @@ Researched from Devpost pages, live demos, and public repos. Read once tonight; 
 | **OweMe Health** | Reconciles medical payments vs. insurance EOBs | Fin. Inclusion | 🟡 Our category rival |
 | **Kaktua** | AI English speaking coach (shipped on Play Store) | Education | 🟡 Only one monetizing |
 | **VERA Ai** | Reads benefits eligibility charts → autofills forms | Fin. Inclusion | 🟢 Thin build |
-| **ScholarPilot** | AI scholarship matching | Education | 🟢 6 commits, no video |
+| **ScholarPilot** | AI scholarship matching | Education | 🟢 6 commits, thinnest build |
 
 ## The three gaps we exploit
 
 **1. Nobody has a business model.** Not one of the twelve states pricing, revenue, or GTM. Kaktua is the only monetizing product, and its claim of "hundreds of active users, 15% conversion" is contradicted by a Play Store listing showing **10+ downloads**. Feasibility is 25% of the score and the field is largely forfeiting it. Our `/for-institutions` page is shipped *in the product*.
 
-**2. Demo fragility.** Several have **no demo video at all** (Proofly has a Loom; ShowWhere and OweMe have videos; TRACE, Réunia, VERA, Lumos, DocuPal, ScholarPilot do not). Multiple depend on Render free-tier apps cold-starting live. Our hands-free auto-demo plus full offline mode is the most demo-proof entry in the field.
+**2. Live proof, not recorded proof.** ⚠️ *Corrected:* **all twelve have YouTube demo videos** — verified in the page HTML (an earlier pass missed them because Devpost embeds them in iframes). So video is table stakes, not an edge. The edge is what happens *on stage*: their pitches depend on either playing a recording or a live Render free-tier app cold-starting. Ours drives the **real product, hands-free, live** — and with the API key pulled it still runs on scripted state machines. Don't claim "they don't have videos." Claim: *"this isn't a recording — it's the live product driving itself."*
 
 **3. Determinism.** Most of the field is OCR → LLM → summary. DocuPal, VERA, and Proofly have thin answers to *"what happens when the model gets a date or a dollar wrong?"* — on immigration paperwork, that's catastrophic. Our answer is structural: **the AI never touches a number.**
 
@@ -33,7 +33,7 @@ Researched from Devpost pages, live demos, and public repos. Read once tonight; 
 
 **Spairly** — the deepest engineering in the field: full AWS prod environment in Terraform, GuardDuty scanning, DynamoDB transactional writes. *Its soft spot:* the flagship demo scenario is **fictional**, the GitHub link **404s**, it admits zero adoption, and marketplace cold-start is unaddressed.
 
-**Proofly** — 201 backend + 29 frontend tests (I verified the repo), live demo, Loom video, explicit safety posture. *Its soft spot:* it deliberately **won't tell you if you qualify** — "evaluates document readiness, not visa eligibility" — so a judge can fairly ask what it's worth beyond a smart folder. Solo builder, 18 commits.
+**Proofly** — 201 backend + 29 frontend tests (I verified the repo), live demo, demo video, explicit safety posture. *Its soft spot:* it deliberately **won't tell you if you qualify** — "evaluates document readiness, not visa eligibility" — so a judge can fairly ask what it's worth beyond a smart folder. Solo builder, 18 commits.
 
 ## Where we win on each criterion
 
@@ -45,5 +45,5 @@ Researched from Devpost pages, live demos, and public repos. Read once tonight; 
 ## Positioning notes
 
 - **Immigration track is a bloodbath** — Proofly, Lumos, DocuPal, WageShield, TRACE all fight there for the O-1 prize. **Don't frame ourselves as an immigration-paperwork tool.** We're financial protection *for* newcomers, which is a different, emptier lane.
-- **Financial Inclusion is nearly open.** Only VERA Ai (no live demo at all) and OweMe Health (arguably not an AI project — its Built With lists no model) are in it. We should be the obvious pick.
+- **Financial Inclusion is nearly open.** Among finalists only **VERA Ai** (benefits-eligibility charts) and **OweMe Health** (medical-bill overcharges) sit squarely in it — and only TRACE declared its tracks publicly, so the judges are slotting everyone else by what the project obviously does. We should be the obvious pick here.
 - **Don't attack anyone by name.** Judges dislike it and the room is collaborative. Win on contrast — *"most tools help you after you've been targeted"* — never on takedowns.

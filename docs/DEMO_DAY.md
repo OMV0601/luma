@@ -52,7 +52,7 @@ Lead the problem with that. It is the single most resonant thing we can say to t
 I researched all 12 rival finalists. These gaps are real and exploitable:
 
 1. **A business model.** *Not one other finalist states a revenue model or GTM* — I checked all twelve. Kaktua claims freemium traction, but its Play Store listing shows "10+ downloads" against a claim of "hundreds of active users," which is the most fragile claim in the field. We have the KnowBe4 comparable, three named streams, and `/for-institutions` **shipped inside the product**. This is 25% of the score (Feasibility) that most of the room is forfeiting.
-2. **A demo that cannot fail.** Two of the strongest competitors have **no demo video at all**, and several depend on a Render free-tier app cold-starting live on stage. We have a hands-free auto-demo that drives the real app, plus a full offline mode. Nobody else can do this.
+2. **A demo that cannot fail.** Every finalist has a polished recorded video — that's table stakes. What none of their pages shows is a demo that drives the **live** product by itself. On stage they either play a recording or gamble on a Render free-tier app cold-starting. Ours takes the cursor and plays a real round, and with the API key pulled it still runs offline. Say *"this isn't a recording"* — never *"they don't have videos."*
 3. **Determinism in a room full of LLM wrappers.** Most of the field is OCR → LLM → summary. When a judge asks *"what happens when the model gets it wrong?"* — DocuPal, VERA, and Proofly have thin answers. Ours: **the AI never touches a number.** 27 unit tests, an independent referee, and a Wolfram cross-check.
 
 ### Where we are vulnerable — and the honest play
