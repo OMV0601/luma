@@ -1,5 +1,7 @@
 # FoolProof — 5-Minute Video Script (rubric-ordered)
 
+> ⚠️ **SUPERSEDED — do not use for Open Atlas Demo Day.** This is the older LUMA-hackathon video script. For Fri Aug 21 use **pitch/FoolProof-Demo-Day-Script.docx** (the two-person run of show) and **docs/DEMO_DAY.md**.
+
 Judging rubric: Technical Execution 25% · Innovation & UX 25% · Business & Finance 25% · Communication 25%.
 Every section below is mapped to a criterion. Record at 1920×1080, browser at 100% zoom.
 Run `npm run seed:reset && npm run dev` before recording. Practice the demo path twice first.
@@ -74,7 +76,7 @@ your voiceover adds color — don't read them verbatim):
 4. **CALL IT OUT / CAUGHT IN THE ACT** — the tour flags the tactic live.
 5. **WE TOOK THE DEAL — ON PURPOSE** → the Evidence File count-up to **-$2,165**, the
    bounce timeline un-redacting, the referee's margin stamps. *"Losing here is the product
-   working. Every number: deterministic TypeScript, 27 tests, Wolfram-checked."*
+   working. Every number: deterministic TypeScript, 34 tests, Wolfram-checked."*
 6. Press **Esc** after THE TAPE step to exit the tour (you'll show business yourself at 4:30).
 
 **Path B — The Fraud Alert, voice mode, driven by hand (3:30–4:00).** Navigate to

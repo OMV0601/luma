@@ -1,5 +1,7 @@
 # FoolProof — get scammed here, so it never happens out there
 
+> ⚠️ **SUPERSEDED — do not use for Open Atlas Demo Day.** This is the older LUMA-hackathon video script. For Fri Aug 21 use **pitch/FoolProof-Demo-Day-Script.docx** (the two-person run of show) and **docs/DEMO_DAY.md**.
+
 ## Inspiration
 
 In 2025, Americans reported **$15.9 billion** lost to fraud — a record, up 27% in a single year — and **$3.5 billion of it came from imposter scams alone** (FTC). What struck us wasn't the size of the number. It was the mismatch between how money is *lost* and how financial literacy is *taught*.

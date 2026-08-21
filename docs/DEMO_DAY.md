@@ -53,7 +53,7 @@ I researched all 12 rival finalists. These gaps are real and exploitable:
 
 1. **A business model.** *Not one other finalist states a revenue model or GTM* — I checked all twelve. Kaktua claims freemium traction, but its Play Store listing shows "10+ downloads" against a claim of "hundreds of active users," which is the most fragile claim in the field. We have the KnowBe4 comparable, three named streams, and `/for-institutions` **shipped inside the product**. This is 25% of the score (Feasibility) that most of the room is forfeiting.
 2. **A demo that cannot fail.** Every finalist has a polished recorded video — that's table stakes. What none of their pages shows is a demo that drives the **live** product by itself. On stage they either play a recording or gamble on a Render free-tier app cold-starting. Ours takes the cursor and plays a real round, and with the API key pulled it still runs offline. Say *"this isn't a recording"* — never *"they don't have videos."*
-3. **Determinism in a room full of LLM wrappers.** Most of the field is OCR → LLM → summary. When a judge asks *"what happens when the model gets it wrong?"* — DocuPal, VERA, and Proofly have thin answers. Ours: **the AI never touches a number.** 27 unit tests, an independent referee, and a Wolfram cross-check.
+3. **Determinism in a room full of LLM wrappers.** Most of the field is OCR → LLM → summary. When a judge asks *"what happens when the model gets it wrong?"* — DocuPal, VERA, and Proofly have thin answers. Ours: **the AI never touches a number.** 34 unit tests, an independent referee, and a Wolfram cross-check.
 
 ### Where we are vulnerable — and the honest play
 
@@ -137,7 +137,7 @@ That converts our biggest liability into a live demonstration of our core techni
 >
 > **Two — the referee.** A *separate* model call grades the transcript against our ten-tactic taxonomy. **The scammer never grades its own exam.**
 >
-> **Three — the damage engine.** Every dollar you just saw is deterministic TypeScript. Pure functions, twenty-seven unit tests, zero AI. The payday APR is the real CFPB formula; the fake-check timeline is Regulation CC. And the key computation is cross-checked against Wolfram Alpha — two independent systems, or the number doesn't ship.
+> **Three — the damage engine.** Every dollar you just saw is deterministic TypeScript. Pure functions, thirty-four unit tests, zero AI. The payday APR is the real CFPB formula; the fake-check timeline is Regulation CC. And the key computation is cross-checked against Wolfram Alpha — two independent systems, or the number doesn't ship.
 
 *(⚠️ Say this as a property of the system, don't point at the screen: the Wolfram badge only renders when `WOLFRAM_APP_ID` is set, and it is **not** set on the deployed site. Set it in Render, or keep this as a spoken claim about the architecture — which it truthfully is.)*
 >
@@ -202,5 +202,5 @@ Make sure each of these lands somewhere in the five minutes. If a criterion neve
 |---|---|
 | **Impact (25%)** | "$15.9B reported; fraud targets whoever doesn't know the rules yet — which in this country is newcomers, first." |
 | **Creativity (25%)** | "Every other team built AI that helps you. We built AI that robs you." |
-| **Technical Execution (25%)** | "Three separated engines. The scammer never grades its own exam. Every dollar is deterministic TypeScript with 27 tests and a Wolfram cross-check." |
+| **Technical Execution (25%)** | "Three separated engines. The scammer never grades its own exam. Every dollar is deterministic TypeScript with 34 tests and a Wolfram cross-check." |
 | **Feasibility (25%)** | "KnowBe4 for consumer fraud — three revenue streams, and the business page is shipped inside the product. New scams are content, not code." |

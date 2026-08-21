@@ -133,7 +133,7 @@ export const TOUR_STEPS: TourStep[] = [
     timeoutMs: 30000,
     target: '[data-tour="damage"]',
     title: "WE TOOK THE DEAL — ON PURPOSE",
-    body: "This is the Evidence File. The damage figure is not AI output: it's a deterministic TypeScript engine, locked by 27 unit tests, that prices the mistake at $7,200. Losing here is the product working.",
+    body: "This is the Evidence File. The damage figure is not AI output: it's a deterministic TypeScript engine, locked by 34 unit tests, that prices the mistake at $7,200. Losing here is the product working.",
   },
   {
     id: "breakdown",

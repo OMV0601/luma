@@ -71,7 +71,7 @@ export default function Architecture() {
           <Box title="③ THE DAMAGE ENGINE — NO AI" path="server/src/damage/*.ts" accent="green">
             Pure TypeScript functions compute the real cost of your decision: the CFPB payday
             formula (391% APR), the Reg CC fake-check timeline, lease clause totals.{" "}
-            <b>27 unit tests</b> lock the math. The AI never invents a number.
+            <b>34 unit tests</b> lock the math. The AI never invents a number.
           </Box>
           <div className="hidden sm:flex items-center" aria-hidden>
             <ArrowRight className="h-5 w-5 text-ink/40" />

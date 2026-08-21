@@ -24,7 +24,7 @@ Then: *"Pull the API key and the whole loop still runs on scripted state machine
 
 ### 3. "How do you know your numbers are correct?" *(the FINRA/Visa question)*
 
-> "Because we don't generate them. The payday APR is the CFPB fee structure — fifteen dollars per hundred over a fourteen-day term annualizes to three-ninety-one percent. The fake-check timeline is Regulation CC: provisional credit in days, but a counterfeit can take weeks to bounce, and the scam lives entirely in that gap. Twenty-seven unit tests lock those functions, and each scenario's key computation is independently re-run by Wolfram Alpha at debrief time."
+> "Because we don't generate them. The payday APR is the CFPB fee structure — fifteen dollars per hundred over a fourteen-day term annualizes to three-ninety-one percent. The fake-check timeline is Regulation CC: provisional credit in days, but a counterfeit can take weeks to bounce, and the scam lives entirely in that gap. Thirty-four unit tests lock those functions, and each scenario's key computation is independently re-run by Wolfram Alpha at debrief time."
 
 If pressed on the Notario figures: *"$1,500 and $1,200 are typical notario fee ranges; the $4,500 is what remediation counsel costs. The load-bearing fact is the one that isn't an estimate: **Form I-589 has no USCIS filing fee**, so 'filing fees' is a pure invention — that's checkable on uscis.gov."*
 
