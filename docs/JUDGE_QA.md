@@ -102,3 +102,55 @@ Then the differentiator: *"That page isn't a slide — it's shipped in the produ
 - ❌ "We have users" *(we don't; say pre-pilot)*
 - ❌ "It's fully built" *(say what's shipped and what's next)*
 - ❌ Anything vague about the hackathon timeline *(answer #1, immediately, every time)*
+
+
+---
+
+## THE SECOND WAVE — likely, and not yet drilled
+
+### Cost & unit economics *(the engineers will ask this)*
+**"What does a round cost you?"**
+> "A round is roughly five short adversary turns plus one referee call — small prompts, capped outputs. Call it cents, not dollars, and the referee is the expensive half, which is why it runs without extended thinking. At institutional scale the cost per trained member is trivial next to a single reimbursed scam."
+
+⚠️ **Know your real number before you go on.** Check your Anthropic console for spend-per-round and say the actual figure. A confident "about three cents" beats a vague "it's cheap."
+
+### Language *(near-certain in THIS room — do not get caught)*
+**"Notario fraud is run in Spanish. What languages do you support?"**
+> "English only today, and that's the honest gap — it's the single biggest thing between this and the people who need it most. The architecture doesn't fight it: playbooks are JSON and the adversary is a language model, so a Spanish Héctor is a translation and a persona pass, not a rewrite. It's the first thing a pilot would fund."
+
+Never bluff this. The room will know.
+
+### Unauthorized practice of law
+**"You're simulating immigration advice. Isn't that UPL, or close to it?"**
+> "We deliberately never advise. FoolProof teaches three questions — demand the bar number or accreditation letter, read and keep your own form, pay the government directly — which are USCIS's own published guidance, not our legal opinion. The product's whole message is *go find a real accredited representative.*"
+
+**"If someone relies on this and gets it wrong, who's liable?"**
+> "Same posture: we're training, not counsel, and every scenario is fictional. For an institutional deployment that becomes an explicit disclaimer plus a referral path to the partner's own legal aid."
+
+### The moat question
+**"What stops KnowBe4 — or the bank itself — from just building this?"**
+> "Nothing stops them, and that's the honest answer. What's hard isn't the chat: it's the library of researched playbooks with concessions that survive an expert, and the deterministic engine behind every dollar. That's content and domain work, which compounds — a bank building it in-house builds one scenario and stops."
+
+### Model & infrastructure choices
+**"Why Claude? Why not a small open model?"** → Character consistency under pressure is the product; a weak model breaks character the moment it's cornered, which is exactly the demo. The referee's structured-JSON reliability matters more than raw cost.
+**"Latency?"** → First token in a couple of seconds, grading in under ten. The referee is capped at twenty seconds and falls back to the deterministic grader.
+**"What if a user prompt-injects the adversary?"** → Guardrails are in the system prompt, replies are capped, and the referee reads the whole transcript afterward — drift shows up in the Evidence File. Nothing financial is exposed, because the model can't touch a number.
+**"Concurrency?"** → Stateless HTTP, one round per session, sessions in the DB. Horizontal scaling is boring here, which is the point.
+
+### Honesty tests *(they're checking character, not facts)*
+**"What's broken right now?"**
+> "Three things: English only, no efficacy study, and no real users — we're pre-pilot. The deployment is also free-tier, which is why I'm demoing locally."
+
+**"What did you cut?"** → Difficulty tiers, native-language scenarios, and the playbook editor for partner fraud teams.
+**"Who built what?"** → Answer plainly and name your teammates' actual contributions.
+**"How long did it take?"** → See question #1 — same honest framing.
+
+### Business specifics
+**"What's the actual price?"** → Per-member-per-year for FIs, per-seat for schools, $4/mo consumer. Say a number if pressed; vagueness reads as no model.
+**"Who's your first customer?"** → A credit union or a settlement org — small enough to move, close enough to the loss. The ask is one pilot with pre/post catch-rate as the metric.
+**"Credit-union sales cycles are 6–18 months. How do you survive that?"** → Consumer freemium and school seats fund the wait; the FI deal is the compounding one.
+
+### Curveballs
+**"What would you do with the prize?"** → Native-language scenarios and the efficacy study.
+**"Why you over the other finalists?"** → Contrast, never attack: most tools help after you've been targeted; this is the rehearsal before.
+**"Can you show me X right now?"** → Say yes and navigate. You know this app; let them steer for thirty seconds.
