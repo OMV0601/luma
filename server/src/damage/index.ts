@@ -3,6 +3,7 @@ import { paydayDamage } from "./payday.ts";
 import { fraudcallDamage } from "./fraudcall.ts";
 import { leaseDamage } from "./lease.ts";
 import { internshipDamage } from "./internship.ts";
+import { notarioDamage } from "./notario.ts";
 import { genericDamage } from "./generic.ts";
 import type { DamageResult, GenericDamageSpec } from "../types.ts";
 
@@ -27,6 +28,8 @@ export function runDamage(
       return leaseDamage(decision, ctx);
     case "internship":
       return internshipDamage(decision);
+    case "notario":
+      return notarioDamage(decision, ctx);
     case "generic":
       return genericDamage(ctx.spec, decision);
     default:

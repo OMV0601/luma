@@ -48,6 +48,12 @@ app.use(
   }
 );
 
+// Demo-day safety net: an async route that throws should degrade, not
+// end the process (a restart also wipes ephemeral-disk rounds).
+process.on("unhandledRejection", (reason) => {
+  console.error("[unhandledRejection]", reason);
+});
+
 const PORT = Number(process.env.PORT) || 3001;
 
 /**

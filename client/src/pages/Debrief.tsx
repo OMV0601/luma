@@ -175,8 +175,10 @@ export default function Debrief() {
                       {data.scenario.adversaryName}
                     </p>
                     <p className="text-sm mt-1 whitespace-pre-wrap leading-snug">
+                      {/* Evidence marking, not a spellcheck squiggle: a
+                          highlighter swipe with a solid marker underline. */}
                       {anns.length ? (
-                        <mark className="bg-transparent underline decoration-redink decoration-wavy decoration-1 underline-offset-4 text-ink">
+                        <mark className="bg-redink/10 border-b-2 border-redink/60 rounded-[2px] px-0.5 text-ink">
                           {m.content}
                         </mark>
                       ) : (

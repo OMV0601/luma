@@ -25,6 +25,8 @@ export interface LeaseClause {
 
 export interface ScenarioDocument {
   title: string;
+  /** short label for the in-round document button, e.g. "Lease" / "Agreement" */
+  shortLabel?: string;
   text: string;
   clauses: LeaseClause[];
   /** plain-English one-liner per numbered clause ("1".."18") — the jargon translator */

@@ -210,7 +210,7 @@ export default function Round() {
               onClick={() => setShowDoc(true)}
               data-tour="doc-btn"
             >
-              <FileText className="h-3.5 w-3.5" /> Lease
+              <FileText className="h-3.5 w-3.5" /> {s.document.shortLabel ?? "Document"}
             </button>
           )}
           <button

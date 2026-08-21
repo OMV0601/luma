@@ -446,7 +446,7 @@ api.post("/round/:id/decide", async (req, res) => {
   if (scenario.damageModel === "payday") {
     ctx.upsold = findings.some((f) => f.tacticId === "anchoring" && f.outcome === "fell_for") && decision === "take";
   }
-  if (scenario.damageModel === "lease" && playbook.document) {
+  if ((scenario.damageModel === "lease" || scenario.damageModel === "notario") && playbook.document) {
     ctx.challengedClauses = playbook.document.clauses
       .filter((c) => findings.some((f) => f.tacticId === c.tacticId && f.outcome === "caught"))
       .map((c) => c.id);
@@ -456,7 +456,14 @@ api.post("/round/:id/decide", async (req, res) => {
     ctx.spec = playbook.damageSpec;
   }
 
-  const damage = runDamage(scenario.damageModel, decision, ctx);
+  let damage;
+  try {
+    damage = runDamage(scenario.damageModel, decision, ctx);
+  } catch (err) {
+    // Never let a bad model/decision take the server down mid-round.
+    console.error("[damage] engine refused", scenario.damageModel, decision, err);
+    return res.status(500).json({ error: "Could not score this round." });
+  }
 
   // 5) Persist everything.
   db.update(schema.sessions)

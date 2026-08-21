@@ -6,6 +6,7 @@ import { describe, it, expect } from "vitest";
 import { paydayDamage, paydayAPR } from "./payday.ts";
 import { fraudcallDamage, FRAUDCALL } from "./fraudcall.ts";
 import { leaseDamage, LEASE_TOTAL } from "./lease.ts";
+import { notarioDamage, NOTARIO_TOTAL } from "./notario.ts";
 import { internshipDamage, INTERNSHIP } from "./internship.ts";
 import { showcase, matches } from "./verify.ts";
 
@@ -108,6 +109,42 @@ describe("internship (fake-check overpayment)", () => {
 
   it("rejects unknown decisions", () => {
     expect(() => internshipDamage("ghost")).toThrow();
+  });
+});
+
+
+describe("notario (immigration-services fraud)", () => {
+  it("sign as-is = $7,200 (1500 + 1200 + 4500)", () => {
+    expect(NOTARIO_TOTAL).toBe(7200);
+    expect(notarioDamage("take").damageDollars).toBe(7200);
+  });
+
+  it("striking the non-attorney paragraph removes the biggest cost", () => {
+    const r = notarioDamage("negotiated", { challengedClauses: ["not_attorney"] });
+    expect(r.damageDollars).toBe(2700);
+  });
+
+  it("striking all three paragraphs = $0", () => {
+    const r = notarioDamage("negotiated", {
+      challengedClauses: ["nonrefundable", "mail_redirect", "not_attorney"],
+    });
+    expect(r.damageDollars).toBe(0);
+  });
+
+  it("negotiating without challenging anything costs the same as signing", () => {
+    expect(notarioDamage("negotiated").damageDollars).toBe(7200);
+  });
+
+  it("walk = -$7,200 protected", () => {
+    expect(notarioDamage("walk").damageDollars).toBe(-7200);
+  });
+
+  it("every row is buried — the whole loss lives in the fine print", () => {
+    expect(notarioDamage("take").breakdown.every((r) => r.buried)).toBe(true);
+  });
+
+  it("rejects unknown decisions", () => {
+    expect(() => notarioDamage("shrug")).toThrow();
   });
 });
 
