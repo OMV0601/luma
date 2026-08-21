@@ -11,6 +11,28 @@ import { TACTICS } from "../../shared/tactics.ts";
 import type { Playbook, Finding } from "./types.ts";
 
 const REFEREE_MODEL = process.env.REFEREE_MODEL || "claude-sonnet-4-6";
+/**
+ * Grading is structured extraction, not open reasoning, so extended
+ * thinking buys little and costs a lot of wall-clock. On a small host it
+ * was the difference between a debrief and a gateway timeout — which also
+ * wiped the round, because free-tier disks are ephemeral. Opt back in with
+ * REFEREE_THINKING=adaptive.
+ */
+const REFEREE_THINKING =
+  process.env.REFEREE_THINKING === "adaptive"
+    ? ({ type: "adaptive" } as const)
+    : ({ type: "disabled" } as const);
+/** Hard ceiling on grading. Past this we serve the deterministic grader. */
+const REFEREE_TIMEOUT_MS = Number(process.env.REFEREE_TIMEOUT_MS) || 20_000;
+
+/** Reject after ms so a slow model can never hold the response open. */
+function withTimeout<T>(work: Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout>;
+  const bell = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`referee timed out after ${ms}ms`)), ms);
+  });
+  return Promise.race([work, bell]).finally(() => clearTimeout(timer)) as Promise<T>;
+}
 
 export interface TranscriptEntry {
   turnIndex: number;
@@ -98,7 +120,7 @@ async function llmReferee(
     const res = await anthropic.messages.create({
       model: REFEREE_MODEL,
       max_tokens: 4096,
-      thinking: { type: "adaptive" },
+      thinking: REFEREE_THINKING,
       messages: [{ role: "user", content: extra ? `${prompt}\n\n${extra}` : prompt }],
     });
     const block = res.content.find((b) => b.type === "text");
