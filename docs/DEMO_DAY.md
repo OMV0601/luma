@@ -97,28 +97,35 @@ That converts our biggest liability into a live demonstration of our core techni
 
 ### 1:20–3:20 · THE LIVE DEMO `[CORE]` — two minutes, the heart of the pitch
 
-**[SCREEN]** Switch to the app. Click **▶ Watch the auto-demo**. Narrate over it — do not read the popup cards aloud, add color instead.
+**You are driving this by hand.** Six beats, rehearsed. Do not read the screen aloud — narrate over it.
 
-> "So rather than tell you it works, I'll let it demo itself. Everything you're about to see is live — real rounds, real AI adversaries, nothing pre-recorded."
+> "Rather than describe it, I'll play a round. This is live — a real AI character, and every number you see comes from code, not the model."
 
-**Beat 1 — The Notario** *(the scenario built for this audience)*
-> "This is Héctor. He runs an immigration-services storefront. He never once says the words 'I am a lawyer' — he just says *notario*, and lets twenty years of your life experience finish the sentence. That's the whole con.
->
-> Watch — the app asks him the one question that breaks it: *are you a licensed attorney?*"
+**① The scene (0:15).** `localhost:5173` → Gauntlet → **The Notario**.
+> "Héctor runs an immigration-services storefront. In most of Latin America a *notario público* IS a licensed attorney. Here it means a man who can witness a signature. He never says he's a lawyer — he doesn't have to. That single mistranslation is the entire business."
 
-*(Let the concession land on screen: no bar number, no DOJ accreditation.)*
+**② Corner him (0:30).** Type: **"Are you a licensed attorney? What is your bar number?"**
+> "Watch what the playbook forces him to do."
 
-> "He folds, because our playbooks force honest concessions when you corner them precisely. And then he re-anchors on the deadline — which is exactly what a real one does."
+*(He folds: no bar number, no DOJ accreditation, a notary may only witness signatures — then re-anchors on the deadline. Let the judges read it. Then:)*
 
-**Beat 2 — the Evidence File**
-> "We take the bad deal on purpose, and this is the payoff: the Evidence File. Seven thousand two hundred dollars — fifteen hundred cash, twelve hundred in 'filing fees' for a form that has **no USCIS filing fee at all**, and forty-five hundred to a real attorney to undo it. And the part that isn't money: a frivolous asylum claim filed in your name can bar you from relief for life.
->
-> Every tactic he ran is stamped in the margin — caught, resisted, or fell for it — with the exact quote as evidence."
+> "That's not the model being helpful. Concessions are written into the playbook: cornered precisely, the character must admit the checkable fact — and then do what a real one does, and pivot back to the clock."
 
-**Beat 3 — breadth** `[CUT FIRST]`
-> "Same engine, six scenarios — a payday lender, a fake recruiter, a landlord's poisoned lease, a toll-fee text, and a bank imposter in full voice mode with live captions. That one you answer with your actual voice."
+**③ Open the Agreement (0:20).** Click **Agreement** in the header.
+> "He slides this across the desk and calls it standard paperwork."
 
-*(If the auto-demo is still running when you hit 3:15, hit **Esc** and move on. Never let the demo run the clock out.)*
+**④ Plain English (0:25) — the money moment for this room.** Click **Plain English**.
+> "One tap. Every paragraph, translated. And the traps expose themselves — paragraph four: fifteen hundred is his the second you hand it over, non-refundable even if HE quits. Paragraph six: USCIS mail about *your* case goes to *his* address, and you waive copies — so you can never check what he filed. Paragraph nine admits he isn't an attorney, and in the same breath authorizes him to choose your forms. **Jargon is where the money hides. Translation is the defense.**"
+
+**⑤ Challenge it (0:10).** Tap **¶9**, then flag the message as **Authority Impersonation**.
+> "I'm challenging that paragraph on the record, and naming the tactic while he's still running it."
+
+**⑥ The Evidence File (0:20).** Click **Pay the cash & sign**.
+> "I took the deal on purpose, because losing here is the product working. Seven thousand two hundred dollars — and look at the itemization: paragraph four, paragraph six, paragraph nine. The load-bearing fact isn't an estimate: **Form I-589 has no USCIS filing fee at all**, so twelve hundred dollars of 'filing fees' was invented. Every tactic he ran is stamped in the margin — caught, or fell for it — with his own words as evidence."
+
+*(If time is tight, cut ③–⑤ and go straight to the Evidence File. If you have room, add: "and had I struck all three paragraphs instead, this reads zero — reading the contract is a winnable path, not a footnote.")*
+
+**Do not attempt voice mode live.** It is excellent and it is a coin flip on a Zoom share. Mention it, don't demo it.
 
 ### 3:20–4:15 · THE ARCHITECTURE `[CORE]` — this is the Technical Execution score
 
@@ -157,7 +164,8 @@ That converts our biggest liability into a live demonstration of our core techni
 Presenting remotely into an in-person room is a real disadvantage: you have no body language, no room energy, and you are one dropped frame from being forgotten. Compensate with flawless mechanics.
 
 ### The night before (tonight)
-- [ ] **P0 — the live URL is dead.** `foolproof.onrender.com` returns *"This service has been suspended by its owner."* If a judge clicks it, that is the last impression they have. **Either** un-suspend/redeploy it in the Render dashboard **or** remove the URL from the deck's closing slide. Do not leave it pointing at a suspended service.
+- [ ] **Demo from localhost, not the live URL.** `https://foolproof-jpch.onrender.com` is up and current, but it is free-tier: it spins down after ~15 min idle and **restarts wipe the database**, which kills an in-progress round. I watched that happen twice while testing. Keep the live URL as the judges' leave-behind, not as your demo target.
+- [ ] Open the live URL ~5 minutes before you present anyway, so it is warm if a judge clicks it during Q&A.
 - [ ] Run `npm run seed:reset && npm run dev` and play your **full manual demo path once, start to finish.** It must be green.
 - [ ] **Create `server/.env`** (copy `server/.env.example`) and paste `ANTHROPIC_API_KEY`. Without it, localhost runs the *scripted* adversary — fully functional, but not the live Claude character that makes the demo sing. Optionally add `WOLFRAM_APP_ID` (free) to light up the cross-check badge.
 - [ ] Record a **backup screen capture of the full auto-demo** (3 min, with audio). If anything breaks live, you play the recording and narrate over it. This is your parachute — do not skip it.
