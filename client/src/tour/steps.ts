@@ -48,7 +48,7 @@ export interface TourStep {
 }
 
 const PROBE_QUESTION =
-  "Why would the equipment money go through my personal bank account?";
+  "Are you a licensed attorney? What is your bar number?";
 
 export const TOUR_STEPS: TourStep[] = [
   {
@@ -69,13 +69,13 @@ export const TOUR_STEPS: TourStep[] = [
     id: "subjects",
     target: '[data-tour="subjects"]',
     title: "THE WANTED WALL",
-    body: "Every card is a playable scam with a real manipulation playbook — a payday counter, a fake recruiter, a bank imposter with full voice mode, a landlord with a poisoned lease, a toll-fee text. New scams ship as JSON, not code.",
+    body: "Every card is a playable scam with a real manipulation playbook — a payday counter, a fake recruiter, a bank imposter with full voice mode, a landlord with a poisoned lease, a toll-fee text, and an immigration-services \"notario.\" New scams ship as JSON, not code.",
   },
   {
     id: "enter",
     actions: [{ type: "ensure-guest" }],
-    title: "MEET JORDAN",
-    body: "The Dream Internship: the number-one scam hitting students right now — a dream job DM, a check in the mail, and a favor to repay. The tour plays the round for you now. Watch the cursor.",
+    title: "MEET HÉCTOR",
+    body: "The Notario: the scam that targets newcomers hardest. In most of Latin America a \"notario público\" IS a licensed attorney — here it means a man who can witness a signature. He never says he is a lawyer. He does not have to. The tour plays the round for you now.",
   },
   {
     id: "scene",
@@ -83,17 +83,17 @@ export const TOUR_STEPS: TourStep[] = [
     actions: [
       { type: "click", selector: '[data-tour="nav-gauntlet"]' },
       { type: "sleep", ms: 700 },
-      { type: "click", selector: '[data-tour="open-internship"]' },
+      { type: "click", selector: '[data-tour="open-the-notario"]' },
     ],
     target: '[data-tour="scene"]',
     title: "THE SCENE",
-    body: "You're a student. You never applied to this. It pays double your friend's lifeguard job. Every scenario opens with the moment before the mistake.",
+    body: "Your work permit is everything right now, and a cousin passed you his number. Every scenario opens on the moment before the mistake — the one you would actually be living.",
   },
   {
     id: "opening",
     target: '[data-tour="adversary-msg"]::last',
     title: "THE ADVERSARY",
-    body: "Jordan is an AI character driven by a beat-by-beat playbook — recruiter warmth, HR-portal furniture, one hidden objective. Online it's a live Claude character; offline a scripted state machine runs the same playbook. The demo cannot break.",
+    body: "Héctor is an AI character driven by a beat-by-beat playbook — community warmth, a framed commission on the wall, one hidden objective. Online it's a live Claude character; offline a scripted state machine runs the same playbook. The demo cannot break.",
   },
   {
     id: "probe",
@@ -106,7 +106,7 @@ export const TOUR_STEPS: TourStep[] = [
     ],
     target: '[data-tour="adversary-msg"]::last',
     title: "CORNERED ON SPECIFICS",
-    body: "We asked the one question this scam can't survive. The playbook forces honest concessions when cornered precisely — \"it IS a little unusual\" — then re-anchors on the deadline. Real scammers do exactly this.",
+    body: "We asked the one question this scam cannot survive. The playbook forces honest concessions when cornered precisely — no bar number, no DOJ accreditation, a notary may only witness signatures — and then he re-anchors on the deadline. Real ones do exactly this.",
   },
   {
     id: "flag-open",
@@ -119,7 +119,7 @@ export const TOUR_STEPS: TourStep[] = [
   {
     id: "flag-pick",
     actions: [
-      { type: "click", selector: '[data-tour="tactic-flooding"]' },
+      { type: "click", selector: '[data-tour="tactic-authority"]' },
       { type: "sleep", ms: 500 },
     ],
     target: '[data-tour="adversary-msg"]::last',
@@ -133,13 +133,13 @@ export const TOUR_STEPS: TourStep[] = [
     timeoutMs: 30000,
     target: '[data-tour="damage"]',
     title: "WE TOOK THE DEAL — ON PURPOSE",
-    body: "This is the Evidence File. The damage figure is not AI output: it's a deterministic TypeScript engine — the Reg CC fake-check timeline, 27 unit tests — that prices the mistake at $2,165. Losing here is the product working.",
+    body: "This is the Evidence File. The damage figure is not AI output: it's a deterministic TypeScript engine, locked by 27 unit tests, that prices the mistake at $7,200. Losing here is the product working.",
   },
   {
     id: "breakdown",
     target: '[data-tour="breakdown"]',
     title: "THE ITEMIZED DAMAGE",
-    body: "Day 2: you Zelle $2,130 of real money. Day 7: the check bounces and the bank claws back all $2,480 — including the $350 \"first week's pay,\" which was your own provisional credit all along. The buried mechanics un-redact themselves.",
+    body: "$1,500 cash with no receipt. $1,200 in \"filing fees\" for Form I-589 — which has no USCIS filing fee at all, so every dollar was invented. $4,500 to a real attorney to undo it. And the part that isn't money: a frivolous claim filed in your name can bar you for life.",
   },
   {
     id: "verified",
