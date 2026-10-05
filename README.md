@@ -52,6 +52,13 @@ During a round, flag any adversary message and name the tactic (10-tactic taxono
 - **Voice mode with always-on captions** (`aria-live`), a typed fallback, and one-tap switch to text.
 - Full keyboard navigation: skip-to-content link, visible focus states, Escape-closable dialogs.
 
+## Team
+
+Built by two people: [Om Vyas](https://github.com/OMV0601) and [Pranav Prasanna](https://github.com/PranavPrasannaV).
+
+- **Om:** the first version of the API server (scenarios, routes and the scoring engine). Also the seed playbooks and lease document, the Scam Factory and scenario-validator scripts, and the voice-call screen. On the client, the Round, Debrief and Profile pages, username/password auth, the interactive tutorial, mobile layout and deploy config.
+- **Pranav:** the later iterations, including the Notario scenario, guest mode and adversary tuning. Also the QA pass and the Demo Day pitch.
+
 ## Run it
 
 ```bash
